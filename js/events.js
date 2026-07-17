@@ -39,7 +39,7 @@ Fluid.events = {
       var expanded = isDesktop()
         ? !body.hasClass('sidebar-nav-collapsed')
         : body.hasClass('sidebar-nav-open');
-      jQuery('.animated-icon').toggleClass('open', expanded);
+      toggleButton.toggleClass('sidebar-toggle-expanded', expanded);
       toggleButton.attr('aria-expanded', expanded ? 'true' : 'false');
     };
 
