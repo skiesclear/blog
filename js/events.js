@@ -15,6 +15,7 @@ Fluid.events = {
     }
     var body = jQuery('body');
     var toggleButton = jQuery('#navbar-toggler-btn');
+    var toggleIcon = jQuery('#navbar-toggle-icon');
     var storageKey = 'Fluid_Sidebar_Nav_Collapsed';
 
     var isDesktop = function() {
@@ -40,6 +41,9 @@ Fluid.events = {
         ? !body.hasClass('sidebar-nav-collapsed')
         : body.hasClass('sidebar-nav-open');
       toggleButton.toggleClass('sidebar-toggle-expanded', expanded);
+      if (toggleIcon.length > 0) {
+        toggleIcon.attr('src', expanded ? toggleIcon.data('fold-src') : toggleIcon.data('unfold-src'));
+      }
       toggleButton.attr('aria-expanded', expanded ? 'true' : 'false');
     };
 
