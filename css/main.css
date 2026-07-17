@@ -484,10 +484,10 @@ sup > a::before,
 }
 .sidebar-toggler .sidebar-toggle-icon {
   display: block;
-  width: 54px;
-  height: 54px;
+  width: 30px;
+  height: 30px;
   max-width: none;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   pointer-events: none;
 }
