@@ -13,70 +13,82 @@ Fluid.events = {
     if (navbar.length === 0) {
       return;
     }
-    var submenu = jQuery('#navbar .dropdown-menu');
-    if (navbar.offset().top > 0) {
-      navbar.removeClass('navbar-dark');
-      submenu.removeClass('navbar-dark');
-    }
-    Fluid.utils.listenScroll(function() {
-      navbar[navbar.offset().top > 50 ? 'addClass' : 'removeClass']('top-nav-collapse');
-      submenu[navbar.offset().top > 50 ? 'addClass' : 'removeClass']('dropdown-collapse');
-      if (navbar.offset().top > 0) {
-        navbar.removeClass('navbar-dark');
-        submenu.removeClass('navbar-dark');
-      } else {
-        navbar.addClass('navbar-dark');
-        submenu.removeClass('navbar-dark');
+    var body = jQuery('body');
+    var toggleButton = jQuery('#navbar-toggler-btn');
+    var storageKey = 'Fluid_Sidebar_Nav_Collapsed';
+
+    var isDesktop = function() {
+      return window.innerWidth >= 992;
+    };
+
+    var setLS = function(k, v) {
+      try {
+        localStorage.setItem(k, v);
+      } catch (e) {}
+    };
+
+    var getLS = function(k) {
+      try {
+        return localStorage.getItem(k);
+      } catch (e) {
+        return null;
       }
-    });
+    };
 
-    var mobileGridMenu = jQuery('#mobile-grid-menu');
+    var syncToggleState = function() {
+      var expanded = isDesktop()
+        ? !body.hasClass('sidebar-nav-collapsed')
+        : body.hasClass('sidebar-nav-open');
+      jQuery('.animated-icon').toggleClass('open', expanded);
+      toggleButton.attr('aria-expanded', expanded ? 'true' : 'false');
+    };
 
-    jQuery('#navbar-toggler-btn').on('click', function() {
+    var applyStoredState = function() {
+      body.removeClass('sidebar-nav-open mobile-menu-open');
+      if (isDesktop()) {
+        body.toggleClass('sidebar-nav-collapsed', getLS(storageKey) === 'true');
+      } else {
+        body.removeClass('sidebar-nav-collapsed');
+      }
+      syncToggleState();
+    };
+
+    applyStoredState();
+
+    toggleButton.on('click', function() {
       var $this = jQuery(this);
       if ($this.data('animating')) {
         return;
       }
       $this.data('animating', true);
-      jQuery('.animated-icon').toggleClass('open');
 
-      // On mobile use grid menu; on desktop keep original collapse behavior
-      if (window.innerWidth < 992) {
-        navbar.addClass('top-nav-collapse');
-        mobileGridMenu.toggleClass('show');
-        // Apply staggered animation delays when opening
-        if (mobileGridMenu.hasClass('show')) {
-          mobileGridMenu.find('.mobile-grid-cell, .mobile-grid-group-header').each(function(i, el) {
-            el.style.animationDelay = (i * 20) + 'ms';
-          });
-        }
-        // Prevent body scroll when menu is open
-        jQuery('body').toggleClass('mobile-menu-open', mobileGridMenu.hasClass('show'));
+      if (isDesktop()) {
+        body.toggleClass('sidebar-nav-collapsed');
+        setLS(storageKey, body.hasClass('sidebar-nav-collapsed') ? 'true' : 'false');
       } else {
-        jQuery('#navbar').toggleClass('navbar-col-show');
+        body.toggleClass('sidebar-nav-open');
       }
+      syncToggleState();
 
       setTimeout(function() {
         $this.data('animating', false);
       }, 300);
     });
 
-    // Close grid menu when a link inside it is clicked
-    mobileGridMenu.on('click', 'a[href]:not([href="javascript:;"])', function() {
-      mobileGridMenu.removeClass('show');
-      jQuery('.animated-icon').removeClass('open');
-      jQuery('body').removeClass('mobile-menu-open');
-      navbar.removeClass('top-nav-collapse');
-      jQuery('#navbar-toggler-btn').data('animating', false);
+    navbar.on('click', 'a[href]:not([href="javascript:;"])', function() {
+      if (!isDesktop()) {
+        body.removeClass('sidebar-nav-open');
+        syncToggleState();
+      }
     });
 
-    // Close grid menu on resize to desktop
+    jQuery('#sidebar-nav-backdrop').on('click', function() {
+      body.removeClass('sidebar-nav-open');
+      syncToggleState();
+    });
+
     jQuery(window).on('resize', function() {
-      if (window.innerWidth >= 992 && mobileGridMenu.hasClass('show')) {
-        mobileGridMenu.removeClass('show');
-        jQuery('.animated-icon').removeClass('open');
-        jQuery('body').removeClass('mobile-menu-open');
-      }
+      applyStoredState();
     });
   },
 
