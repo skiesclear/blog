@@ -46,7 +46,11 @@ Fluid.events = {
     var applyStoredState = function() {
       body.removeClass('sidebar-nav-open mobile-menu-open');
       if (isDesktop()) {
-        body.toggleClass('sidebar-nav-collapsed', getLS(storageKey) === 'true');
+        if (body.hasClass('page-home')) {
+          body.removeClass('sidebar-nav-collapsed');
+        } else {
+          body.toggleClass('sidebar-nav-collapsed', getLS(storageKey) !== 'false');
+        }
       } else {
         body.removeClass('sidebar-nav-collapsed');
       }
