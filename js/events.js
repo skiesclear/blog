@@ -46,10 +46,10 @@ Fluid.events = {
     var applyStoredState = function() {
       body.removeClass('sidebar-nav-open mobile-menu-open');
       if (isDesktop()) {
-        if (body.hasClass('page-home')) {
+        if (body.hasClass('page-fixed-nav')) {
           body.removeClass('sidebar-nav-collapsed');
         } else {
-          body.toggleClass('sidebar-nav-collapsed', getLS(storageKey) !== 'false');
+          body.addClass('sidebar-nav-collapsed');
         }
       } else {
         body.removeClass('sidebar-nav-collapsed');
@@ -67,6 +67,10 @@ Fluid.events = {
       $this.data('animating', true);
 
       if (isDesktop()) {
+        if (body.hasClass('page-fixed-nav')) {
+          $this.data('animating', false);
+          return;
+        }
         body.toggleClass('sidebar-nav-collapsed');
         setLS(storageKey, body.hasClass('sidebar-nav-collapsed') ? 'true' : 'false');
       } else {

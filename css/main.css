@@ -58,17 +58,20 @@ h6:hover > .anchorjs-link {
   font-size: 0.75rem;
   line-height: 1;
   font-weight: bold;
-  padding: 0.3rem 0.1rem 0.1rem 0.1rem;
+  padding: 0.35rem 0.55rem;
   position: absolute;
-  right: 0.45rem;
-  top: 0.15rem;
-  z-index: 1;
+  right: 0.65rem;
+  top: 0.55rem;
+  z-index: 4;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
 }
 .code-widget-light {
-  color: #999;
+  color: #cbd5e1;
 }
 .code-widget-dark {
-  color: #bababa;
+  color: #cbd5e1;
 }
 .copy-btn {
   cursor: pointer;
@@ -77,14 +80,14 @@ h6:hover > .anchorjs-link {
   outline: none;
 }
 .copy-btn > i {
-  font-size: 0.75rem !important;
+  font-size: 0.8rem !important;
   font-weight: 400;
-  margin-right: 0.15rem;
-  opacity: 0;
+  margin-right: 0.2rem;
+  opacity: 0.72;
   transition: opacity 0.2s ease-in-out;
 }
 .markdown-body pre:hover > .copy-btn > i {
-  opacity: 0.9;
+  opacity: 1;
 }
 .markdown-body pre:hover > .copy-btn,
 .markdown-body pre:not(:hover) > .copy-btn {
@@ -565,17 +568,17 @@ sup > a::before,
 body.sidebar-nav-collapsed .left-navbar {
   transform: translateX(-100%);
 }
-body.page-home .left-navbar {
+body.page-fixed-nav .left-navbar {
   transform: translateX(0);
 }
-body.page-home .sidebar-toggler {
+body.page-fixed-nav .sidebar-toggler {
   display: none;
 }
-body.page-home main,
-body.page-home footer {
+body.page-fixed-nav main,
+body.page-fixed-nav footer {
   padding-left: 248px;
 }
-body.page-home #board {
+body.page-fixed-nav #board {
   padding: 0;
   background: transparent;
   box-shadow: none;
@@ -1647,29 +1650,59 @@ body.mobile-menu-open {
 }
 .markdown-body .highlight pre,
 .markdown-body pre {
-  padding: 1.45rem 1rem;
+  padding: 3.2rem 1.15rem 1.15rem;
+  border-radius: 0.55rem;
+  line-height: 1.65;
+  box-shadow: none;
 }
 .markdown-body pre code.hljs {
   padding: 0;
 }
 .markdown-body pre[class*="language-"] {
-  padding-top: 1.45rem;
-  padding-bottom: 1.45rem;
-  padding-right: 1rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  padding-top: 3.2rem;
+  padding-bottom: 1.15rem;
+  padding-right: 1.15rem;
+  line-height: 1.65;
+  margin-bottom: 0;
 }
 .markdown-body .code-wrapper {
   position: relative;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  margin: 1.4rem 0;
+  border: 1px solid rgba(47,65,84,0.1);
+  box-shadow: 0 14px 34px rgba(47,65,84,0.12);
+}
+.markdown-body .code-wrapper::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0.95rem;
+  left: 1rem;
+  width: 0.68rem;
+  height: 0.68rem;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 1.05rem 0 0 #ffbd2e, 2.1rem 0 0 #28c840;
+}
+.markdown-body .code-wrapper::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.55rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .markdown-body .hljs,
 .markdown-body .highlight pre,
 .markdown-body .code-wrapper pre,
 .markdown-body figure.highlight td.gutter {
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  background-color: var(--highlight-bg-color);
+  background-color: #1f2937;
+  color: #dbeafe;
 }
 pre[class*=language-].line-numbers {
   position: initial;
@@ -1679,12 +1712,42 @@ figure {
 }
 figure.highlight {
   position: relative;
+  overflow: hidden;
+  margin: 1.4rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(47,65,84,0.1);
+  box-shadow: 0 14px 34px rgba(47,65,84,0.12);
+  background: #1f2937;
+}
+figure.highlight::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0.95rem;
+  left: 1rem;
+  width: 0.68rem;
+  height: 0.68rem;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 1.05rem 0 0 #ffbd2e, 2.1rem 0 0 #28c840;
+}
+figure.highlight::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.55rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 figure.highlight table {
   border: 0;
   margin: 0;
   width: auto;
-  border-radius: 4px;
+  border-radius: 0;
+  background: #1f2937;
 }
 figure.highlight td {
   border: 0;
@@ -1705,12 +1768,13 @@ figure.highlight td.gutter {
 }
 figure.highlight td.gutter pre {
   text-align: right;
-  padding: 0 0.75rem;
+  padding: 3.2rem 0.85rem 1.15rem;
   border-radius: initial;
-  border-right: 1px solid #999;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
 }
 figure.highlight td.gutter pre span.line {
-  color: #999;
+  color: #94a3b8;
 }
 figure.highlight td.code > pre {
   border-top-left-radius: 0;
