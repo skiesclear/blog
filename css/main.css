@@ -58,36 +58,31 @@ h6:hover > .anchorjs-link {
   font-size: 0.75rem;
   line-height: 1;
   font-weight: bold;
-  padding: 0.35rem 0.55rem;
+  padding: 0.42rem 0.7rem;
   position: absolute;
   right: 0.65rem;
   top: 0.55rem;
   z-index: 4;
   border-radius: 999px;
-  background: rgba(255,255,255,0.08);
+  color: #2f5f86;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(74,116,148,0.16);
+  box-shadow: 0 4px 12px rgba(74,116,148,0.1);
   backdrop-filter: blur(8px);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .code-widget-light {
-  color: #cbd5e1;
+  color: #2f5f86;
 }
 .code-widget-dark {
-  color: #cbd5e1;
+  color: #2f5f86;
 }
 .copy-btn {
   cursor: pointer;
   user-select: none;
   -webkit-appearance: none;
   outline: none;
-}
-.copy-btn > i {
-  font-size: 0.8rem !important;
-  font-weight: 400;
-  margin-right: 0.2rem;
-  opacity: 0.72;
-  transition: opacity 0.2s ease-in-out;
-}
-.markdown-body pre:hover > .copy-btn > i {
-  opacity: 1;
 }
 .markdown-body pre:hover > .copy-btn,
 .markdown-body pre:not(:hover) > .copy-btn {
@@ -462,63 +457,39 @@ sup > a::before,
 .sidebar-toggler {
   position: absolute;
   top: 0.85rem;
-  right: -54px;
-  width: 44px;
-  height: 44px;
+  right: -52px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 0;
-  border-radius: 0.35rem;
+  border-radius: 50%;
   outline: 0;
-  background-color: var(--navbar-bg-color);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  color: #2f5f86;
+  background: linear-gradient(180deg, #fff 0%, #eaf6ff 100%);
+  box-shadow: 0 8px 18px rgba(47,95,134,0.18);
+  border: 1px solid rgba(47,95,134,0.14);
+  transition: transform 0.18s ease-in-out, box-shadow 0.18s ease-in-out, background 0.18s ease-in-out;
 }
 .sidebar-toggler:focus {
   outline: 0;
 }
-.animated-icon {
-  width: 24px;
-  height: 18px;
-  position: relative;
-  margin: 0;
-  transform: rotate(0deg);
-  transition: 0.5s ease-in-out;
-  cursor: pointer;
+.sidebar-toggler:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(47,95,134,0.24);
 }
-.animated-icon span {
+.sidebar-toggler::before {
+  content: "‹";
   display: block;
-  position: absolute;
-  height: 2px;
-  width: 100%;
-  border-radius: 2px;
-  opacity: 1;
-  left: 0;
-  transform: rotate(0deg);
-  transition: 0.25s ease-in-out;
-  background-color: var(--navbar-text-color);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  transform: translateY(-1px);
 }
-.animated-icon span:nth-child(1) {
-  top: 0;
-}
-.animated-icon span:nth-child(2) {
-  top: 8px;
-}
-.animated-icon span:nth-child(3) {
-  top: 16px;
-}
-.animated-icon.open span:nth-child(1) {
-  top: 8px;
-  transform: rotate(135deg);
-}
-.animated-icon.open span:nth-child(2) {
-  opacity: 0;
-  left: -24px;
-}
-.animated-icon.open span:nth-child(3) {
-  top: 8px;
-  transform: rotate(-135deg);
+.animated-icon {
+  display: none;
 }
 #sidebar-nav-backdrop {
   display: none;
@@ -567,6 +538,9 @@ sup > a::before,
 }
 body.sidebar-nav-collapsed .left-navbar {
   transform: translateX(-100%);
+}
+body.sidebar-nav-collapsed .sidebar-toggler::before {
+  content: "›";
 }
 body.page-fixed-nav .left-navbar {
   transform: translateX(0);
@@ -1670,8 +1644,8 @@ body.mobile-menu-open {
   overflow: hidden;
   border-radius: 0.75rem;
   margin: 1.4rem 0;
-  border: 1px solid rgba(47,65,84,0.1);
-  box-shadow: 0 14px 34px rgba(47,65,84,0.12);
+  border: 1px solid rgba(74,116,148,0.16);
+  box-shadow: 0 14px 34px rgba(74,116,148,0.12);
 }
 .markdown-body .code-wrapper::before {
   content: "";
@@ -1682,8 +1656,8 @@ body.mobile-menu-open {
   width: 0.68rem;
   height: 0.68rem;
   border-radius: 50%;
-  background: #ff5f57;
-  box-shadow: 1.05rem 0 0 #ffbd2e, 2.1rem 0 0 #28c840;
+  background: #ff8a7a;
+  box-shadow: 1.05rem 0 0 #ffd166, 2.1rem 0 0 #7bd88f;
 }
 .markdown-body .code-wrapper::after {
   content: "";
@@ -1693,16 +1667,29 @@ body.mobile-menu-open {
   left: 0;
   right: 0;
   height: 2.55rem;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, #eaf6ff 0%, #f7fbff 100%);
+  border-bottom: 1px solid rgba(74,116,148,0.12);
 }
 .markdown-body .hljs,
 .markdown-body .highlight pre,
 .markdown-body .code-wrapper pre,
 .markdown-body figure.highlight td.gutter {
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  background-color: #1f2937;
-  color: #dbeafe;
+  background-color: #f7fbff;
+  color: #233142;
+}
+.markdown-body .hljs *,
+.markdown-body .highlight *,
+.markdown-body .code-wrapper * {
+  color: inherit !important;
+  background: transparent !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+}
+.markdown-body .code-widget {
+  color: #2f5f86 !important;
+  background: rgba(255,255,255,0.72) !important;
+  font-weight: 700 !important;
 }
 pre[class*=language-].line-numbers {
   position: initial;
@@ -1715,9 +1702,9 @@ figure.highlight {
   overflow: hidden;
   margin: 1.4rem 0;
   border-radius: 0.75rem;
-  border: 1px solid rgba(47,65,84,0.1);
-  box-shadow: 0 14px 34px rgba(47,65,84,0.12);
-  background: #1f2937;
+  border: 1px solid rgba(74,116,148,0.16);
+  box-shadow: 0 14px 34px rgba(74,116,148,0.12);
+  background: #f7fbff;
 }
 figure.highlight::before {
   content: "";
@@ -1728,8 +1715,8 @@ figure.highlight::before {
   width: 0.68rem;
   height: 0.68rem;
   border-radius: 50%;
-  background: #ff5f57;
-  box-shadow: 1.05rem 0 0 #ffbd2e, 2.1rem 0 0 #28c840;
+  background: #ff8a7a;
+  box-shadow: 1.05rem 0 0 #ffd166, 2.1rem 0 0 #7bd88f;
 }
 figure.highlight::after {
   content: "";
@@ -1739,15 +1726,15 @@ figure.highlight::after {
   left: 0;
   right: 0;
   height: 2.55rem;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, #eaf6ff 0%, #f7fbff 100%);
+  border-bottom: 1px solid rgba(74,116,148,0.12);
 }
 figure.highlight table {
   border: 0;
   margin: 0;
   width: auto;
   border-radius: 0;
-  background: #1f2937;
+  background: #f7fbff;
 }
 figure.highlight td {
   border: 0;
@@ -1770,11 +1757,11 @@ figure.highlight td.gutter pre {
   text-align: right;
   padding: 3.2rem 0.85rem 1.15rem;
   border-radius: initial;
-  border-right: 1px solid rgba(255,255,255,0.1);
-  color: #94a3b8;
+  border-right: 1px solid rgba(74,116,148,0.14);
+  color: #7a8fa6;
 }
 figure.highlight td.gutter pre span.line {
-  color: #94a3b8;
+  color: #7a8fa6;
 }
 figure.highlight td.code > pre {
   border-top-left-radius: 0;
