@@ -91,7 +91,45 @@ Fluid.events = {
       syncToggleState();
     });
 
+    var qrcodePopover = jQuery('#navbar-qrcode-popover');
+    navbar.on('click', '.navbar-social-qrcode', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var button = this;
+      var qrcode = button.getAttribute('data-qrcode');
+      if (!qrcode) {
+        return;
+      }
+      var img = qrcodePopover.find('img');
+      img.removeAttr('srcset').removeAttr('lazyload').attr('src', qrcode);
+      qrcodePopover.addClass('show');
+
+      var rect = button.getBoundingClientRect();
+      var popoverWidth = qrcodePopover.outerWidth();
+      var popoverHeight = qrcodePopover.outerHeight();
+      var left = Math.min(window.innerWidth - popoverWidth - 12, rect.right + 12);
+      var top = Math.min(window.innerHeight - popoverHeight - 12, rect.top - 10);
+      if (left < 12) {
+        left = 12;
+      }
+      if (top < 12) {
+        top = 12;
+      }
+      qrcodePopover.css({ left: left + 'px', top: top + 'px' });
+    });
+
+    jQuery(document).on('click', function(e) {
+      if (!qrcodePopover.hasClass('show')) {
+        return;
+      }
+      if (qrcodePopover[0].contains(e.target) || jQuery(e.target).closest('.navbar-social-qrcode').length > 0) {
+        return;
+      }
+      qrcodePopover.removeClass('show');
+    });
+
     jQuery(window).on('resize', function() {
+      qrcodePopover.removeClass('show');
       applyStoredState();
     });
   },
