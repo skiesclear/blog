@@ -467,10 +467,10 @@ sup > a::before,
   border: 0;
   border-radius: 50%;
   outline: 0;
-  color: #2f5f86;
-  background: linear-gradient(180deg, #fff 0%, #eaf6ff 100%);
-  box-shadow: 0 8px 18px rgba(47,95,134,0.18);
-  border: 1px solid rgba(47,95,134,0.14);
+  color: #fff;
+  background: linear-gradient(180deg, #2f5f86 0%, #1f4668 100%);
+  box-shadow: 0 8px 18px rgba(31,70,104,0.28);
+  border: 1px solid rgba(255,255,255,0.72);
   transition: transform 0.18s ease-in-out, box-shadow 0.18s ease-in-out, background 0.18s ease-in-out;
 }
 .sidebar-toggler:focus {
@@ -478,7 +478,8 @@ sup > a::before,
 }
 .sidebar-toggler:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(47,95,134,0.24);
+  background: linear-gradient(180deg, #3a719d 0%, #255777 100%);
+  box-shadow: 0 12px 24px rgba(31,70,104,0.36);
 }
 .sidebar-toggler::before {
   content: "‹";
