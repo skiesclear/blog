@@ -19,22 +19,22 @@
   <meta name="author" content="clearday">
   <meta name="keywords" content="">
   
-    <meta name="description" content="this is a test page">
+    <meta name="description" content="huggingface 下载命令1pip install huggingface_hub 使用国内镜像1export HF_ENDPOINT&#x3D;https:&#x2F;&#x2F;hf-mirror.com  &#x2F;data&#x2F;VLdatasets&#x2F;UAV-Flow 需要事先创建好记得下数据集用dataset关键字，下模型时用model关键字  1hf download --repo-type">
 <meta property="og:type" content="article">
-<meta property="og:title" content="test">
-<meta property="og:url" content="http://skiesclear.github.io/posts/test/index.html">
+<meta property="og:title" content="huggingface download manual">
+<meta property="og:url" content="http://skiesclear.github.io/posts/huggingface-download-manual/index.html">
 <meta property="og:site_name" content="Clearday Blog">
-<meta property="og:description" content="this is a test page">
+<meta property="og:description" content="huggingface 下载命令1pip install huggingface_hub 使用国内镜像1export HF_ENDPOINT&#x3D;https:&#x2F;&#x2F;hf-mirror.com  &#x2F;data&#x2F;VLdatasets&#x2F;UAV-Flow 需要事先创建好记得下数据集用dataset关键字，下模型时用model关键字  1hf download --repo-type">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-07-17T11:06:26.000Z">
-<meta property="article:modified_time" content="2026-07-17T11:06:43.973Z">
+<meta property="article:published_time" content="2026-07-18T04:41:12.000Z">
+<meta property="article:modified_time" content="2026-07-18T04:44:13.162Z">
 <meta property="article:author" content="clearday">
-<meta property="article:tag" content="test">
+<meta property="article:tag" content="huggingface">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>test - Clearday Blog</title>
+  <title>huggingface download manual - Clearday Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -228,13 +228,30 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">test</h1>
+            <h1 id="seo-header">huggingface download manual</h1>
             
             
               <div class="markdown-body">
                 
-                <p>this is a test page</p>
+                <h1 id="huggingface-下载命令"><a href="#huggingface-下载命令" class="headerlink" title="huggingface 下载命令"></a>huggingface 下载命令</h1><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> huggingface_hub<br></code></pre></td></tr></table></figure>
+<h2 id="使用国内镜像"><a href="#使用国内镜像" class="headerlink" title="使用国内镜像"></a>使用国内镜像</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">HF_ENDPOINT</span>=https://hf-mirror.com<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>&#x2F;data&#x2F;VLdatasets&#x2F;UAV-Flow 需要事先创建好<br>记得下数据集用dataset关键字，下模型时用model关键字</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">hf download <span class="hljs-attr">--repo-type</span> dataset wangxiangyu0814/UAV-<span class="hljs-attribute">Flow</span> <span class="hljs-attr">--local-dir</span> /data/VLdatasets/UAV-<span class="hljs-attribute">Flow</span><br></code></pre></td></tr></table></figure>
 
+<h2 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h2><blockquote>
+<p>需要事先装  sudo apt install aria2 -y</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">nohup hf download <span class="hljs-attr">--repo-type</span> dataset wangxiangyu0814/UAV-<span class="hljs-attribute">Flow</span> <span class="hljs-attr">--local-dir</span> /data/VLdatasets/UAV-<span class="hljs-attribute">Flow</span> <span class="hljs-attr">--max-workers</span> <span class="hljs-number">8</span> &gt; /tmp/uav_download<span class="hljs-selector-class">.log</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &amp;<br></code></pre></td></tr></table></figure>
+
+<h2 id="查看下载进度"><a href="#查看下载进度" class="headerlink" title="查看下载进度"></a>查看下载进度</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">du -sh <span class="hljs-regexp">/data/</span>VLdatasets<span class="hljs-regexp">/UAV-Flow/</span><br></code></pre></td></tr></table></figure>
+<h2 id="查看进程时候在运行"><a href="#查看进程时候在运行" class="headerlink" title="查看进程时候在运行"></a>查看进程时候在运行</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">ps</span> aux | <span class="hljs-keyword">grep</span> hf<br></code></pre></td></tr></table></figure>
+<h2 id="查看下载速度"><a href="#查看下载速度" class="headerlink" title="查看下载速度"></a>查看下载速度</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nethogs<br></code></pre></td></tr></table></figure>
+<h1 id="本机下载之后传输到服务器"><a href="#本机下载之后传输到服务器" class="headerlink" title="本机下载之后传输到服务器"></a>本机下载之后传输到服务器</h1><blockquote>
+<p>示例  rsync -av –progress &#x2F;c&#x2F;本地路径&#x2F;model.safetensors user@server:&#x2F;远程路径&#x2F;</p>
+</blockquote>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">rsync -av --progress -e <span class="hljs-string">&quot;ssh -p 4022&quot;</span> model<span class="hljs-number">-00001</span>-of<span class="hljs-number">-00004</span>.safetensors yaojianhang_25<span class="hljs-variable">@59</span>.<span class="hljs-number">72.109</span>.<span class="hljs-number">86</span><span class="hljs-symbol">:/home/yaojianhang_25/</span><br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -246,7 +263,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/test/" class="print-no-link">#test</a>
+        <a href="/blog/tags/huggingface/" class="print-no-link">#huggingface</a>
       
     </div>
   
@@ -256,7 +273,7 @@
               
   
 
-  <div class="license-box my-3" style="background-color: hsl(52, 82%, 96%);">
+  <div class="license-box my-3" style="background-color: hsl(154, 82%, 96%);">
     <div class="license-meta">
       
         <div class="license-meta-item">
@@ -267,7 +284,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 17, 2026</div>
+          <div>July 18, 2026</div>
         </div>
       
       
