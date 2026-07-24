@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/fluid.png">
+  <link rel="icon" href="/blog/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="clearday">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH Guard">
+<meta property="og:url" content="http://skiesclear.github.io/posts/SSH-Guard/index.html">
+<meta property="og:site_name" content="Clearday Blog">
+<meta property="og:description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-24T11:05:01.000Z">
+<meta property="article:modified_time" content="2026-07-24T13:07:28.605Z">
+<meta property="article:author" content="clearday">
+<meta property="article:tag" content="ssh_guard">
+<meta property="article:tag" content="vscode_accelerate">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>SSH Guard - Clearday Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"skiesclear.github.io","root":"/blog/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body class="banner-disabled sidebar-nav-collapsed">
+  
+
+  <header>
+    
+
+<div class="header-inner no-banner">
+  
+
+<nav id="navbar" class="navbar navbar-dark left-navbar" aria-label="Site navigation">
+  <button id="navbar-toggler-btn" class="navbar-toggler sidebar-toggler sidebar-toggle-expanded" type="button"
+          aria-controls="navbar-sidebar-content" aria-expanded="true" aria-label="Toggle navigation">
+    <img id="navbar-toggle-icon" class="sidebar-toggle-icon"
+         src="/blog/img/navigationBar/flod.png"
+         data-fold-src="/blog/img/navigationBar/flod.png"
+         data-unfold-src="/blog/img/navigationBar/unflod.png"
+         data-no-lazyload="true" alt="" aria-hidden="true">
+  </button>
+
+  <div id="navbar-sidebar-content" class="navbar-sidebar-content">
+    <div class="navbar-profile">
+      
+        <a class="navbar-avatar-link" href="/blog/" aria-label="Fluid">
+          <img class="navbar-avatar" src="/blog/img/avatar.png" srcset="/blog/img/loading.gif" lazyload alt="avatar">
+        </a>
+      
+      <div class="navbar-social-grid" aria-label="Social links">
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://github.com/skiesclear" target="_blank" rel="nofollow noopener" aria-label="GitHub">
+              <img src="/blog/img/navigationBar/github-icon.png" srcset="/blog/img/loading.gif" lazyload alt="GitHub">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <button class="navbar-social-item navbar-social-qrcode" type="button" data-qrcode="/blog/img/wechat/wechat_QR.jpg" aria-label="WeChat">
+              <img src="/blog/img/navigationBar/wechat-icon.png" srcset="/blog/img/loading.gif" lazyload alt="WeChat">
+            </button>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="mailto:yaojx25@mails.jlu.edu.cn" target="_blank" rel="nofollow noopener" aria-label="Email">
+              <img src="/blog/img/navigationBar/email-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Email">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://t.me/clearday" target="_blank" rel="nofollow noopener" aria-label="Telegram">
+              <img src="/blog/img/navigationBar/telegram-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Telegram">
+            </a>
+          
+        
+      </div>
+      <a class="navbar-brand" href="/blog/">Fluid</a>
+    </div>
+
+    <ul class="navbar-nav sidebar-nav-list">
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/" target="_self">
+              <i class="iconfont icon-home-fill"></i>
+              <span>Home</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/archives/" target="_self">
+              <i class="iconfont icon-archive-fill"></i>
+              <span>Archives</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/tags/" target="_self">
+              <i class="iconfont icon-tags-fill"></i>
+              <span>Tags</span>
+            </a>
+          </li>
+        
+      
+      
+    </ul>
+  </div>
+</nav>
+
+<div id="sidebar-nav-backdrop"></div>
+<div id="navbar-qrcode-popover" aria-hidden="true">
+  <img src="" srcset="/blog/img/loading.gif" lazyload alt="qrcode">
+</div>
+
+  
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SSH Guard</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>先行尝试终端ssh连接，再尝试vscode等应用远程连接。</p>
+<h1 id="host-key过期"><a href="#host-key过期" class="headerlink" title="host key过期"></a>host key过期</h1><p>如果出现类似下面的报错信息：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@</span><br><span class="hljs-comment">@</span>    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     <span class="hljs-comment">@</span><br><span class="hljs-comment">@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><br>.....<br></code></pre></td></tr></table></figure>
+
+<p>linux系统上需运行(<strong>替换用户家目录</strong>)：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>window系统上需运行：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix">ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="vscode加速"><a href="#vscode加速" class="headerlink" title="vscode加速"></a>vscode加速</h1><p>将vscode的配置进行修改</p>
+<h2 id="对于2022服务器配置"><a href="#对于2022服务器配置" class="headerlink" title="对于2022服务器配置"></a>对于2022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">2022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">2022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">2022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.176</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">2022</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="对于1022服务器配置"><a href="#对于1022服务器配置" class="headerlink" title="对于1022服务器配置"></a>对于1022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">1022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">1022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">1022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.166</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">1022</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/ssh-guard/" class="print-no-link">#ssh_guard</a>
+      
+        <a href="/blog/tags/vscode-accelerate/" class="print-no-link">#vscode_accelerate</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3" style="background-color: hsl(317, 82%, 96%);">
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>clearday</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 24, 2026</div>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/posts/SC-SAGIN-MKERL-%E8%AE%BA%E6%96%87%E4%BF%AE%E6%94%B9%E6%84%8F%E8%A7%81-%E2%80%94%E2%80%94sun/" title="SC-SAGIN-MKERL 论文修改意见 ——sun">
+                        <span class="hidden-mobile">SC-SAGIN-MKERL 论文修改意见 ——sun</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
