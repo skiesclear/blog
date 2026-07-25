@@ -2,7 +2,7 @@
 body.banner-disabled #seo-header {
   display: block !important;
   border-bottom: none !important;
-  text-align: left !important;
+  text-align: center !important;
   margin-bottom: 0.3em !important;
 }
 
