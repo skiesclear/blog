@@ -1940,6 +1940,16 @@ post-custom {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   line-height: 1.5;
+  text-align: center;
+}
+.post-intro {
+  text-align: center;
+  color: var(--post-heading-color);
+  font-size: 1.05em;
+  line-height: 1.8;
+  margin-bottom: 1.5em;
+  padding: 0 2rem;
+  opacity: 0.8;
 }
 .custom,
 #comments {
@@ -1983,7 +1993,6 @@ mjx-container svg:focus,
 .footnote-ref [class*=hint--][aria-label]:after {
   max-width: 12rem;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 @-moz-keyframes post-prev-anim {
