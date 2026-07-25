@@ -2,11 +2,16 @@
 body.banner-disabled #seo-header {
   display: block !important;
   border-bottom: none !important;
+  text-align: left !important;
+  margin-bottom: 0.3em !important;
 }
 
-/* Intro: left-aligned, line below, 2em gap to content */
+/* Intro: align with title, line below, 2em gap to content */
 .post-intro {
   text-align: left !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 0 !important;
   border-bottom: 2px solid var(--line-color) !important;
   padding-bottom: 1em !important;
   margin-bottom: 2em !important;
