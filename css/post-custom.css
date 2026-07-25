@@ -1,9 +1,13 @@
 /* Show post title when banner is disabled */
 body.banner-disabled #seo-header {
   display: block !important;
+  border-bottom: none !important;
 }
 
-/* Increase spacing between intro and content */
+/* Intro: left-aligned, line below, 2em gap to content */
 .post-intro {
-  margin-bottom: 2.5em !important;
+  text-align: left !important;
+  border-bottom: 2px solid var(--line-color) !important;
+  padding-bottom: 1em !important;
+  margin-bottom: 2em !important;
 }
