@@ -31,6 +31,7 @@
           return {
             title  : jQuery('title', this).text(),
             content: jQuery('content', this).text(),
+            intro  : jQuery('intro', this).text(),
             url    : jQuery('url', this).text()
           };
         }).get();
@@ -39,7 +40,7 @@
           $result.html('');
         }
 
-        $input.on('input', function() {
+        $input.off('input').on('input', function() {
           // 0x03. parse query to keywords list
           var content = $input.val();
           var resultHTML = '';
@@ -85,6 +86,15 @@
             // 0x05. show search results
             if (isMatch) {
               resultHTML += '<a href=\'' + data_url + '\' class=\'list-group-item list-group-item-action font-weight-bolder search-list-title\'>' + orig_data_title + '</a>';
+              if (data.intro && data.intro.trim() !== '') {
+                var orig_data_intro = data.intro.trim().replace(/<[^>]+>/g, '');
+                // highlight keywords in intro
+                keywords.forEach(function(keyword) {
+                  var regS = new RegExp(keyword, 'gi');
+                  orig_data_intro = orig_data_intro.replace(regS, '<span class="search-word">' + keyword + '</span>');
+                });
+                resultHTML += '<p class=\'search-list-intro\'>' + orig_data_intro + '</p>';
+              }
               var content = orig_data_content;
               if (first_occur >= 0) {
                 // cut out 100 characters
@@ -140,6 +150,7 @@
     }
 
     $input.val('').removeClass('invalid').removeClass('valid');
+    $input.off('input');
     $result.html('');
   }
 
@@ -147,6 +158,7 @@
   var searchSelector = '#local-search-input';
   var resultSelector = '#local-search-result';
   modal.on('show.bs.modal', function() {
+    jQuery(searchSelector).val('').removeClass('invalid').removeClass('valid');
     var path = CONFIG.search_path || '/local-search.xml';
     localSearchFunc(path, searchSelector, resultSelector);
   });

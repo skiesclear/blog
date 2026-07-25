@@ -851,6 +851,11 @@ body.sidebar-nav-open .left-navbar {
 #local-search-result .search-list-content {
   padding: 0 1.25rem;
 }
+#local-search-result .search-list-intro {
+  padding: 0 1.25rem;
+  color: #666;
+  font-size: 0.9em;
+}
 #local-search-result .search-word {
   color: #ff4500;
 }
