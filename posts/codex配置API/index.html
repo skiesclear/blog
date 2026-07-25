@@ -19,23 +19,26 @@
   <meta name="author" content="clearday">
   <meta name="keywords" content="">
   
-    <meta name="description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+    <meta name="description" content="codex-cli安装环境安装 1234567891011121314# Download and install nvm:curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;nvm-sh&#x2F;nvm&#x2F;v0.40.6&#x2F;install.sh | bash# in lieu of restarting the shell\. &quot;$HOME&#x2F;.nvm&#x2F;nvm.sh">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SSH Guard">
-<meta property="og:url" content="http://skiesclear.github.io/posts/SSH-Guard/index.html">
+<meta property="og:title" content="codex配置API">
+<meta property="og:url" content="http://skiesclear.github.io/posts/codex%E9%85%8D%E7%BD%AEAPI/index.html">
 <meta property="og:site_name" content="Clearday Blog">
-<meta property="og:description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+<meta property="og:description" content="codex-cli安装环境安装 1234567891011121314# Download and install nvm:curl -o- https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;nvm-sh&#x2F;nvm&#x2F;v0.40.6&#x2F;install.sh | bash# in lieu of restarting the shell\. &quot;$HOME&#x2F;.nvm&#x2F;nvm.sh">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-07-24T11:05:01.000Z">
-<meta property="article:modified_time" content="2026-07-24T13:07:28.605Z">
+<meta property="og:image" content="https://nodejs.org/en/download">
+<meta property="og:image" content="https://github.com/saladday/cc-switch-cli">
+<meta property="article:published_time" content="2026-07-25T03:34:12.000Z">
+<meta property="article:modified_time" content="2026-07-25T03:55:12.338Z">
 <meta property="article:author" content="clearday">
-<meta property="article:tag" content="ssh_guard">
-<meta property="article:tag" content="vscode_accelerate">
+<meta property="article:tag" content="cc-switch-cli">
+<meta property="article:tag" content="codex-cli">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nodejs.org/en/download">
   
   
   
-  <title>SSH Guard - Clearday Blog</title>
+  <title>codex配置API - Clearday Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -229,25 +232,38 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SSH Guard</h1>
+            <h1 id="seo-header">codex配置API</h1>
             
             
               <div class="markdown-body">
                 
-                <p>先行尝试终端ssh连接，再尝试vscode等应用远程连接。</p>
-<h1 id="host-key过期"><a href="#host-key过期" class="headerlink" title="host key过期"></a>host key过期</h1><p>如果出现类似下面的报错信息：</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@</span><br><span class="hljs-comment">@</span>    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     <span class="hljs-comment">@</span><br><span class="hljs-comment">@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><br>.....<br></code></pre></td></tr></table></figure>
+                <h1 id="codex-cli安装"><a href="#codex-cli安装" class="headerlink" title="codex-cli安装"></a>codex-cli安装</h1><h2 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h2><p><img src="https://nodejs.org/en/download" srcset="/blog/img/loading.gif" lazyload alt="最新node+npm环境"></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment"># Download and install nvm:</span><br>curl -o- https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/nvm-sh/</span>nvm<span class="hljs-regexp">/v0.40.6/i</span>nstall.sh | bash<br><br><span class="hljs-comment"># in lieu of restarting the shell</span><br>\. <span class="hljs-string">&quot;$HOME/.nvm/nvm.sh&quot;</span><br><br><span class="hljs-comment"># Download and install Node.js:</span><br>nvm install <span class="hljs-number">24</span><br><br><span class="hljs-comment"># Verify the Node.js version:</span><br>node -v <span class="hljs-comment"># Should print &quot;v24.18.0&quot;.</span><br><br><span class="hljs-comment"># Verify npm version:</span><br>npm -v <span class="hljs-comment"># Should print &quot;11.16.0&quot;.</span><br></code></pre></td></tr></table></figure>
 
-<p>linux系统上需运行(<strong>替换用户家目录</strong>)：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
+<h2 id="codex-cli下载"><a href="#codex-cli下载" class="headerlink" title="codex-cli下载"></a>codex-cli下载</h2><blockquote>
+<p>需要科学上网，这里可以使用ssh反向代理</p>
+</blockquote>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-built_in">npm</span> install -g @openai/codex<br></code></pre></td></tr></table></figure>
 
-<p>window系统上需运行：</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix">ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
 
-<h1 id="vscode加速"><a href="#vscode加速" class="headerlink" title="vscode加速"></a>vscode加速</h1><p>将vscode的配置进行修改</p>
-<h2 id="对于2022服务器配置"><a href="#对于2022服务器配置" class="headerlink" title="对于2022服务器配置"></a>对于2022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">2022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">2022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">2022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.176</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">2022</span><br></code></pre></td></tr></table></figure>
+<h1 id="配置API"><a href="#配置API" class="headerlink" title="配置API"></a>配置API</h1><blockquote>
+<p>由于codex-cli本身使用其他API配置比较麻烦，在headless服务器种使用cc-switch配置又不现实。所以这里使用cc-switch-cli</p>
+</blockquote>
+<h2 id="cc-switch-cli-下载"><a href="#cc-switch-cli-下载" class="headerlink" title="cc-switch-cli 下载"></a>cc-switch-cli 下载</h2><p><img src="https://github.com/saladday/cc-switch-cli" srcset="/blog/img/loading.gif" lazyload alt="cc-switch-cli Github"></p>
+<blockquote>
+<p>需要科学上网，使用ssh反向代理</p>
+</blockquote>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -fsSL https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/SaladDay/</span>cc-switch-cli<span class="hljs-regexp">/releases/</span>latest<span class="hljs-regexp">/download/i</span>nstall.sh | bash<br><br>cc-switch completions install --activate<br>source <span class="hljs-regexp">/home/y</span>aojianhang_25/.bashrc<br></code></pre></td></tr></table></figure>
 
-<h2 id="对于1022服务器配置"><a href="#对于1022服务器配置" class="headerlink" title="对于1022服务器配置"></a>对于1022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">1022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">1022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">1022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.166</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">1022</span><br></code></pre></td></tr></table></figure>
+<h2 id="配置DeepSeek-API"><a href="#配置DeepSeek-API" class="headerlink" title="配置DeepSeek API"></a>配置DeepSeek API</h2><ol>
+<li>使用<code>cc-switch</code>打开配置界面</li>
+<li>使用<code>]</code>切换为codex配置</li>
+<li>左侧进入 <strong>Providers</strong> 界面</li>
+<li>右侧选择<code>a</code> 添加配置,并选择<strong>DeepSeek</strong>配置添加</li>
+<li>填入<strong>API key</strong>, 保存退出</li>
+<li>使用<code>[Space]</code> 选用DeepSeek配置</li>
+<li>按<code>[Esc]</code>后，点击<code>P</code>开启路由功能，现在就可以正常使用了</li>
+</ol>
 
                 
               </div>
@@ -260,9 +276,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/ssh-guard/" class="print-no-link">#ssh_guard</a>
+        <a href="/blog/tags/codex-cli/" class="print-no-link">#codex-cli</a>
       
-        <a href="/blog/tags/vscode-accelerate/" class="print-no-link">#vscode_accelerate</a>
+        <a href="/blog/tags/cc-switch-cli/" class="print-no-link">#cc-switch-cli</a>
       
     </div>
   
@@ -272,7 +288,7 @@
               
   
 
-  <div class="license-box my-3" style="background-color: hsl(317, 82%, 96%);">
+  <div class="license-box my-3" style="background-color: hsl(258, 82%, 96%);">
     <div class="license-meta">
       
         <div class="license-meta-item">
@@ -283,7 +299,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 24, 2026</div>
+          <div>July 25, 2026</div>
         </div>
       
       
@@ -297,18 +313,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/" title="vscode server国内源更换">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">vscode server国内源更换</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/posts/SC-SAGIN-MKERL-%E8%AE%BA%E6%96%87%E4%BF%AE%E6%94%B9%E6%84%8F%E8%A7%81-%E2%80%94%E2%80%94sun/" title="SC-SAGIN-MKERL 论文修改意见 ——sun">
-                        <span class="hidden-mobile">SC-SAGIN-MKERL 论文修改意见 ——sun</span>
+                      <a href="/blog/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/" title="vscode server国内源更换">
+                        <span class="hidden-mobile">vscode server国内源更换</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

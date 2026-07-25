@@ -19,23 +19,22 @@
   <meta name="author" content="clearday">
   <meta name="keywords" content="">
   
-    <meta name="description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+    <meta name="description" content="添加vscode server国内wget源 需要sudo权限  永久方案，且为所有用户设置 123456789101112sudo tee &#x2F;usr&#x2F;local&#x2F;bin&#x2F;wget &lt;&lt; &#x27;EOF&#x27;#!&#x2F;bin&#x2F;basha&#x3D;(); for x in &quot;$@&quot;; do a+&#x3D;(&quot;$&#123;x&#x2F;&#x2F;update.code.visualst">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SSH Guard">
-<meta property="og:url" content="http://skiesclear.github.io/posts/SSH-Guard/index.html">
+<meta property="og:title" content="vscode server国内源更换">
+<meta property="og:url" content="http://skiesclear.github.io/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/index.html">
 <meta property="og:site_name" content="Clearday Blog">
-<meta property="og:description" content="先行尝试终端ssh连接，再尝试vscode等应用远程连接。 host key过期如果出现类似下面的报错信息： 1234@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @@@@@@@@@@@@@@@@@@@@@@@@">
+<meta property="og:description" content="添加vscode server国内wget源 需要sudo权限  永久方案，且为所有用户设置 123456789101112sudo tee &#x2F;usr&#x2F;local&#x2F;bin&#x2F;wget &lt;&lt; &#x27;EOF&#x27;#!&#x2F;bin&#x2F;basha&#x3D;(); for x in &quot;$@&quot;; do a+&#x3D;(&quot;$&#123;x&#x2F;&#x2F;update.code.visualst">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-07-24T11:05:01.000Z">
-<meta property="article:modified_time" content="2026-07-24T13:07:28.605Z">
+<meta property="article:published_time" content="2026-07-25T03:29:10.000Z">
+<meta property="article:modified_time" content="2026-07-25T03:33:07.487Z">
 <meta property="article:author" content="clearday">
-<meta property="article:tag" content="ssh_guard">
-<meta property="article:tag" content="vscode_accelerate">
+<meta property="article:tag" content="vscode">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>SSH Guard - Clearday Blog</title>
+  <title>vscode server国内源更换 - Clearday Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -229,26 +228,18 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">SSH Guard</h1>
+            <h1 id="seo-header">vscode server国内源更换</h1>
             
             
               <div class="markdown-body">
                 
-                <p>先行尝试终端ssh连接，再尝试vscode等应用远程连接。</p>
-<h1 id="host-key过期"><a href="#host-key过期" class="headerlink" title="host key过期"></a>host key过期</h1><p>如果出现类似下面的报错信息：</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@</span><br><span class="hljs-comment">@</span>    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     <span class="hljs-comment">@</span><br><span class="hljs-comment">@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><span class="hljs-comment">@@</span><br>.....<br></code></pre></td></tr></table></figure>
+                <h1 id="添加vscode-server国内wget源"><a href="#添加vscode-server国内wget源" class="headerlink" title="添加vscode server国内wget源"></a>添加vscode server国内wget源</h1><blockquote>
+<p>需要sudo权限</p>
+</blockquote>
+<p><strong>永久方案，且为所有用户设置</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /usr/local/bin/wget &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span><br><span class="hljs-comment">#!/bin/bash</span><br>a=(); <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>; <span class="hljs-keyword">do</span> a+=(<span class="hljs-string">&quot;<span class="hljs-variable">$&#123;x//update.code.visualstudio.com/vscode.cdn.azure.cn&#125;</span>&quot;</span>); <span class="hljs-keyword">done</span><br><span class="hljs-built_in">exec</span> /usr/bin/wget <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;a[@]&#125;</span>&quot;</span><br>EOF<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> +x /usr/local/bin/wget<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /usr/local/bin/curl &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span><br><span class="hljs-comment">#!/bin/bash</span><br>a=(); <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>; <span class="hljs-keyword">do</span> a+=(<span class="hljs-string">&quot;<span class="hljs-variable">$&#123;x//update.code.visualstudio.com/vscode.cdn.azure.cn&#125;</span>&quot;</span>); <span class="hljs-keyword">done</span><br><span class="hljs-built_in">exec</span> /usr/bin/curl <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;a[@]&#125;</span>&quot;</span><br>EOF<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> +x /usr/local/bin/curl<br></code></pre></td></tr></table></figure>
 
-<p>linux系统上需运行(<strong>替换用户家目录</strong>)：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh<span class="hljs-literal">-keygen</span> <span class="hljs-operator">-f</span> <span class="hljs-string">&quot;/home/yaojianhang_25/.ssh/known_hosts&quot;</span> <span class="hljs-literal">-R</span> <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>window系统上需运行：</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix">ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:1022&quot;</span><br>ssh-keygen <span class="hljs-operator">-</span>f <span class="hljs-string">&quot;$env:USERPROFILE<span class="hljs-char escape_">\.</span>ssh<span class="hljs-char escape_">\k</span>nown_hosts&quot;</span> <span class="hljs-operator">-</span>R <span class="hljs-string">&quot;[xxx.xxx.xxx.xxx]:2022&quot;</span><br></code></pre></td></tr></table></figure>
-
-<h1 id="vscode加速"><a href="#vscode加速" class="headerlink" title="vscode加速"></a>vscode加速</h1><p>将vscode的配置进行修改</p>
-<h2 id="对于2022服务器配置"><a href="#对于2022服务器配置" class="headerlink" title="对于2022服务器配置"></a>对于2022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">2022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">2022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">2022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.176</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">2022</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="对于1022服务器配置"><a href="#对于1022服务器配置" class="headerlink" title="对于1022服务器配置"></a>对于1022服务器配置</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Host <span class="hljs-number">1022</span>服务器校外<br>  HostName xxx.xxx.xxx.xxx<br>  Port <span class="hljs-number">1022</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br><br><span class="hljs-comment"># 修改为如下形式:</span><br><br>Host <span class="hljs-number">1022</span>服务器校外<br>  HostName <span class="hljs-number">10.199</span>.<span class="hljs-number">161.166</span><br>  <span class="hljs-keyword">User</span> <span class="hljs-title">yaojianhang_25</span><br>  ProxyJump yaojianhang_25@xxx.xxx.xxx.xxx:<span class="hljs-number">1022</span><br></code></pre></td></tr></table></figure>
-
+<h1 id="取消设置"><a href="#取消设置" class="headerlink" title="取消设置"></a>取消设置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">rm</span> /usr/local/bin/&#123;wget,curl&#125;<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -260,9 +251,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/ssh-guard/" class="print-no-link">#ssh_guard</a>
-      
-        <a href="/blog/tags/vscode-accelerate/" class="print-no-link">#vscode_accelerate</a>
+        <a href="/blog/tags/vscode/" class="print-no-link">#vscode</a>
       
     </div>
   
@@ -272,7 +261,7 @@
               
   
 
-  <div class="license-box my-3" style="background-color: hsl(317, 82%, 96%);">
+  <div class="license-box my-3" style="background-color: hsl(151, 82%, 96%);">
     <div class="license-meta">
       
         <div class="license-meta-item">
@@ -283,7 +272,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 24, 2026</div>
+          <div>July 25, 2026</div>
         </div>
       
       
@@ -297,9 +286,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/" title="vscode server国内源更换">
+                      <a href="/blog/posts/codex%E9%85%8D%E7%BD%AEAPI/" title="codex配置API">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">vscode server国内源更换</span>
+                        <span class="hidden-mobile">codex配置API</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -307,8 +296,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/posts/SC-SAGIN-MKERL-%E8%AE%BA%E6%96%87%E4%BF%AE%E6%94%B9%E6%84%8F%E8%A7%81-%E2%80%94%E2%80%94sun/" title="SC-SAGIN-MKERL 论文修改意见 ——sun">
-                        <span class="hidden-mobile">SC-SAGIN-MKERL 论文修改意见 ——sun</span>
+                      <a href="/blog/posts/SSH-Guard/" title="SSH Guard">
+                        <span class="hidden-mobile">SSH Guard</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
