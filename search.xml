@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>剪映使用</title>
+      <link href="/blog/posts/%E5%89%AA%E6%98%A0%E4%BD%BF%E7%94%A8/"/>
+      <url>/blog/posts/%E5%89%AA%E6%98%A0%E4%BD%BF%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h1><h2 id="轨道上剪断和选中操作"><a href="#轨道上剪断和选中操作" class="headerlink" title="轨道上剪断和选中操作"></a>轨道上剪断和选中操作</h2><ul><li><code>B</code> 剪断素材</li><li><code>A</code> 点击选中素材</li><li><code>del</code> 删除选中素材</li></ul><h1 id="添加素材"><a href="#添加素材" class="headerlink" title="添加素材"></a>添加素材</h1><h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><h3 id="视频的变速"><a href="#视频的变速" class="headerlink" title="视频的变速"></a>视频的变速</h3><p>视频素材属性中有一个”变速”选项，可以增加视频素材的时常，或者说能够说慢放。</p><h3 id="视频的调色"><a href="#视频的调色" class="headerlink" title="视频的调色"></a>视频的调色</h3><blockquote><p>灰片：log模式下拍摄出来的视频，可以保留更多的色彩信息</p></blockquote><p>视频素材属性中，有一个”调整”选项，</p><h2 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h2><p>由于文字没有动画属性，所以可以右键文字素材，”新建复合片段”，将文字素材添加上视频属性，就可以添加动画了，主要就是入场和出场动画效果</p><h3 id="字幕"><a href="#字幕" class="headerlink" title="字幕"></a>字幕</h3><p>剪映文字中有一个智能文本，能智能识别字幕</p><h2 id="音乐-音效"><a href="#音乐-音效" class="headerlink" title="音乐&#x2F;音效"></a>音乐&#x2F;音效</h2><ol><li>素材上有一道浅黄色的线条，代表音量，可以调节</li></ol><h2 id="配音"><a href="#配音" class="headerlink" title="配音"></a>配音</h2><ol><li>ai配音<br> 添加一段文本，文本属性面板中有一个”朗读”，可以添加不同的音色进行朗读文本，然后点击”开始朗读”，添加朗读音频文件入轨道</li><li>真人配音<br> 这里并不一定说直接给一个mp3文件，可以给一段视频素材，在素材上右键选择”声音分离”，将声音提取出来，然后将视频素材和提取出来的音频素材，在轨道右上角”取消联动”, 单独删除视频素材</li></ol><h1 id="视频剪辑技巧"><a href="#视频剪辑技巧" class="headerlink" title="视频剪辑技巧"></a>视频剪辑技巧</h1><h2 id="转场"><a href="#转场" class="headerlink" title="转场"></a>转场</h2><p>视频切换之间添加转场，使转换不突兀</p><h2 id="关键帧"><a href="#关键帧" class="headerlink" title="关键帧"></a>关键帧</h2><h3 id="对视频"><a href="#对视频" class="headerlink" title="对视频"></a>对视频</h3><p>画面大小可以可以放大、缩小等</p><h3 id="对音频"><a href="#对音频" class="headerlink" title="对音频"></a>对音频</h3><p>可以丝滑放大缩小音量，让人物说话和背景音乐变得丝滑</p><h2 id="蒙版"><a href="#蒙版" class="headerlink" title="蒙版"></a>蒙版</h2>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 剪映 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>codex配置API</title>
       <link href="/blog/posts/codex%E9%85%8D%E7%BD%AEAPI/"/>
       <url>/blog/posts/codex%E9%85%8D%E7%BD%AEAPI/</url>
@@ -17,25 +36,6 @@
             <tag> codex-cli </tag>
             
             <tag> cc-switch-cli </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>vscode server国内源更换</title>
-      <link href="/blog/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/"/>
-      <url>/blog/posts/vscode-server%E5%9B%BD%E5%86%85%E6%BA%90%E6%9B%B4%E6%8D%A2/</url>
-      
-        <content type="html"><![CDATA[<h1 id="添加vscode-server国内wget源"><a href="#添加vscode-server国内wget源" class="headerlink" title="添加vscode server国内wget源"></a>添加vscode server国内wget源</h1><blockquote><p>需要sudo权限</p></blockquote><p><strong>永久方案，且为所有用户设置</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /usr/local/bin/wget &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span><br><span class="hljs-comment">#!/bin/bash</span><br>a=(); <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>; <span class="hljs-keyword">do</span> a+=(<span class="hljs-string">&quot;<span class="hljs-variable">$&#123;x//update.code.visualstudio.com/vscode.cdn.azure.cn&#125;</span>&quot;</span>); <span class="hljs-keyword">done</span><br><span class="hljs-built_in">exec</span> /usr/bin/wget <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;a[@]&#125;</span>&quot;</span><br>EOF<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> +x /usr/local/bin/wget<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">tee</span> /usr/local/bin/curl &lt;&lt; <span class="hljs-string">&#x27;EOF&#x27;</span><br><span class="hljs-comment">#!/bin/bash</span><br>a=(); <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>; <span class="hljs-keyword">do</span> a+=(<span class="hljs-string">&quot;<span class="hljs-variable">$&#123;x//update.code.visualstudio.com/vscode.cdn.azure.cn&#125;</span>&quot;</span>); <span class="hljs-keyword">done</span><br><span class="hljs-built_in">exec</span> /usr/bin/curl <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;a[@]&#125;</span>&quot;</span><br>EOF<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> +x /usr/local/bin/curl<br></code></pre></td></tr></table></figure><h1 id="取消设置"><a href="#取消设置" class="headerlink" title="取消设置"></a>取消设置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">rm</span> /usr/local/bin/&#123;wget,curl&#125;<br></code></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> vscode </tag>
             
         </tags>
       
