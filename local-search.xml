@@ -4,6 +4,28 @@
   
   
   <entry>
+    <title>nomachine 分辨率修改</title>
+    <link href="/blog/posts/nomachine-%E5%88%86%E8%BE%A8%E7%8E%87%E4%BF%AE%E6%94%B9/"/>
+    <url>/blog/posts/nomachine-%E5%88%86%E8%BE%A8%E7%8E%87%E4%BF%AE%E6%94%B9/</url>
+    
+    <intro>修改nomachine 分辨率为1980*1080</intro>
+    
+    
+    <content type="html"><![CDATA[<p>运行命令</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">xrandr</span> --newmode <span class="hljs-string">&quot;1920x1080_60.00&quot;</span> <span class="hljs-number">173</span>.<span class="hljs-number">00</span> <span class="hljs-number">1920</span> <span class="hljs-number">2048</span> <span class="hljs-number">2248</span> <span class="hljs-number">2576</span> <span class="hljs-number">1080</span> <span class="hljs-number">1083</span> <span class="hljs-number">1088</span> <span class="hljs-number">1120</span> -hsync +vsync<br><span class="hljs-attribute">xrandr</span> --addmode VGA-<span class="hljs-number">1</span> <span class="hljs-string">&quot;1920x1080_60.00&quot;</span><br><span class="hljs-attribute">xrandr</span> --output VGA-<span class="hljs-number">1</span> --mode <span class="hljs-string">&quot;1920x1080_60.00&quot;</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>nomachine</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>剪映高版本免vip使用</title>
     <link href="/blog/posts/%E5%89%AA%E6%98%A0%E9%AB%98%E7%89%88%E6%9C%AC%E5%85%8Dvip%E4%BD%BF%E7%94%A8/"/>
     <url>/blog/posts/%E5%89%AA%E6%98%A0%E9%AB%98%E7%89%88%E6%9C%AC%E5%85%8Dvip%E4%BD%BF%E7%94%A8/</url>
