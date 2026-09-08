@@ -21,13 +21,13 @@
   
     <meta name="description" content="模型下载12345678910# download_qwen38_27b.py#!&#x2F;usr&#x2F;bin&#x2F;env python3&quot;&quot;&quot;通过 ModelScope 下载 Qwen&#x2F;Qwen3.8-27B 模型权重&quot;&quot;&quot;from modelscope import snapshot_downloadmodel_dir &#x3D; snapshot_down">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Qwen3.8 27B搭建模型">
-<meta property="og:url" content="http://skiesclear.github.io/posts/Qwen3-8-27B%E6%90%AD%E5%BB%BA%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:title" content="Qwen3.8 27B部署模型">
+<meta property="og:url" content="http://skiesclear.github.io/posts/Qwen3-8-27B%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Clearday Blog">
 <meta property="og:description" content="模型下载12345678910# download_qwen38_27b.py#!&#x2F;usr&#x2F;bin&#x2F;env python3&quot;&quot;&quot;通过 ModelScope 下载 Qwen&#x2F;Qwen3.8-27B 模型权重&quot;&quot;&quot;from modelscope import snapshot_downloadmodel_dir &#x3D; snapshot_down">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-08T08:42:45.000Z">
-<meta property="article:modified_time" content="2026-09-08T09:16:23.029Z">
+<meta property="article:modified_time" content="2026-09-08T10:01:14.273Z">
 <meta property="article:author" content="clearday">
 <meta property="article:tag" content="Qwen 3.8">
 <meta property="article:tag" content="codex">
@@ -36,7 +36,7 @@
   
   
   
-  <title>Qwen3.8 27B搭建模型 - Clearday Blog</title>
+  <title>Qwen3.8 27B部署模型 - Clearday Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -254,7 +254,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Qwen3.8 27B搭建模型</h1>
+            <h1 id="seo-header">Qwen3.8 27B部署模型</h1>
             
               <p class="post-intro">包括部署Qwen3.8 27B的模型，以及连接codex，hermes</p>
             
@@ -268,7 +268,9 @@
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim">nohup <span class="hljs-keyword">python</span> download_qwen38_27b.<span class="hljs-keyword">py</span> &gt; download_qwen38_27b.<span class="hljs-built_in">log</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> &amp;<br>tail -<span class="hljs-keyword">f</span> download_qwen38_27b.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
 
 <h1 id="模型部署"><a href="#模型部署" class="headerlink" title="模型部署"></a>模型部署</h1><h2 id="docker部署命令"><a href="#docker部署命令" class="headerlink" title="docker部署命令"></a>docker部署命令</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">sudo</span> docker run -d --name qwen38-<span class="hljs-number">27</span>b <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --gpus <span class="hljs-string">&quot;device=2,3&quot;</span> <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  -p <span class="hljs-number">30000</span>:<span class="hljs-number">8000</span> <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  -v /home/yaojianhang_25/workspace/Qwen/Qwen3.<span class="hljs-number">8</span>-<span class="hljs-number">27</span>B:/model <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --shm-size <span class="hljs-number">16</span>g <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --restart unless-stopped <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  vllm/vllm-openai:v0.<span class="hljs-number">28</span>.<span class="hljs-number">0</span>-cu129 <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --model /model --served-model-name Qwen3.<span class="hljs-number">8</span>-<span class="hljs-number">27</span>B <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --tensor-parallel-size <span class="hljs-number">2</span> <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --quantization fp8 <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --gpu-memory-utilization <span class="hljs-number">0</span>.<span class="hljs-number">9</span> <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --dtype bfloat16 <span class="hljs-punctuation">\</span><br><span class="hljs-punctuation"></span>  --max-model-len <span class="hljs-number">4096</span><br></code></pre></td></tr></table></figure>
-<h3 id="问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配"><a href="#问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配" class="headerlink" title="问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配"></a>问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配</h3><h2 id="检测部署成功与否"><a href="#检测部署成功与否" class="headerlink" title="检测部署成功与否"></a>检测部署成功与否</h2><ol>
+<h3 id="问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配"><a href="#问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配" class="headerlink" title="问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配"></a>问题1：docker容器需要的显卡驱动版本与容器内的cuda版本不匹配</h3><p>CUDA Toolkit 要求 NVIDIA 驱动版本不低于某个最小值<br>比如说<br>CUDA 12.8：≥ 570.54<br>CUDA 12.9：≥ 575.51<br>CUDA 13.0：≥ 580.65</p>
+<p>vllm&#x2F;vllm-openai:latest使用的cuda为13.0或12.9<br>这意味着如果驱动版本过低会使用<code>NVIDIA 的 CUDA Forward Compatibility（前向兼容，cuda-compat 包）</code><br>但是这个向前兼容的包适用范围，官方限制的很死，只适用于数据中心卡（A100，H100…），而RTX 4090 就是典型的消费卡。也就是说如果驱动版本过低，带有cuda 13.0的docker 容器就不能正常运行。<br>所以这里我只能选择升级服务器驱动到575，使用了<code>vllm/vllm-openai:v0.28.0-cu129</code>来运行Qwen3.8 27B</p>
+<h2 id="检测部署成功与否"><a href="#检测部署成功与否" class="headerlink" title="检测部署成功与否"></a>检测部署成功与否</h2><ol>
 <li>检查容器运行状态</li>
 </ol>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">ps</span> | <span class="hljs-keyword">grep</span> qwen38<br></code></pre></td></tr></table></figure>
@@ -334,7 +336,7 @@
               
   
 
-  <div class="license-box my-3" style="background-color: hsl(160, 82%, 96%);">
+  <div class="license-box my-3" style="background-color: hsl(246, 82%, 96%);">
     <div class="license-meta">
       
         <div class="license-meta-item">
