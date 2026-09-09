@@ -4,6 +4,28 @@
   
   
   <entry>
+    <title>codex对话频繁自己中断</title>
+    <link href="/blog/posts/codex%E5%AF%B9%E8%AF%9D%E9%A2%91%E7%B9%81%E8%87%AA%E5%B7%B1%E4%B8%AD%E6%96%AD/"/>
+    <url>/blog/posts/codex%E5%AF%B9%E8%AF%9D%E9%A2%91%E7%B9%81%E8%87%AA%E5%B7%B1%E4%B8%AD%E6%96%AD/</url>
+    
+    <intro>活儿干一点总是自己断开，每次都要continue继续让它工作，贼烦</intro>
+    
+    
+    <content type="html"><![CDATA[<p>使用codex的goal模式，给agent设定一个目标，如果没完成目标，就一直运行</p><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-symbol">/goal</span> <span class="hljs-symbol">&lt;description&gt;</span><br></code></pre></td></tr></table></figure><h1 id="Goals-vs-prompts"><a href="#Goals-vs-prompts" class="headerlink" title="Goals vs prompts"></a>Goals vs prompts</h1><h2 id="正常prompts会说：执行下一步操作。Goals指令表示：持续执行直至达成此结果。这种区别至关重要。在普通请求中，Codex-会执行当前指令，报告结果，然后等待。而对于目标指令，Codex-则拥有一个与进程绑定的持久目标。回合结束后，它可以检查当前的证据，并判断目标是否达成。如果答案是否定的，且目标仍然有效且在预算范围内，Codex-可以从最新状态继续执行。"><a href="#正常prompts会说：执行下一步操作。Goals指令表示：持续执行直至达成此结果。这种区别至关重要。在普通请求中，Codex-会执行当前指令，报告结果，然后等待。而对于目标指令，Codex-则拥有一个与进程绑定的持久目标。回合结束后，它可以检查当前的证据，并判断目标是否达成。如果答案是否定的，且目标仍然有效且在预算范围内，Codex-可以从最新状态继续执行。" class="headerlink" title="正常prompts会说：执行下一步操作。Goals指令表示：持续执行直至达成此结果。这种区别至关重要。在普通请求中，Codex 会执行当前指令，报告结果，然后等待。而对于目标指令，Codex 则拥有一个与进程绑定的持久目标。回合结束后，它可以检查当前的证据，并判断目标是否达成。如果答案是否定的，且目标仍然有效且在预算范围内，Codex 可以从最新状态继续执行。  "></a>正常prompts会说：执行下一步操作。<br>Goals指令表示：持续执行直至达成此结果。这种区别至关重要。在普通请求中，Codex 会执行当前指令，报告结果，然后等待。而对于目标指令，Codex 则拥有一个与进程绑定的持久目标。回合结束后，它可以检查当前的证据，并判断目标是否达成。如果答案是否定的，且目标仍然有效且在预算范围内，Codex 可以从最新状态继续执行。  </h2><p>因此，当正确的下一步行动取决于 Codex 刚刚学到的信息时，目标就显得尤为有用。例如：</p><blockquote><p>&#x2F;goal Reduce p95 checkout latency below 120 ms on the checkout benchmark while keeping the correctness suite green</p></blockquote><p>此请求不仅仅要求更高的性能。它为 Codex 提供了一个可衡量的结果、一个验证界面和一个约束条件。Codex 可以运行基准测试，检查热点路径，进行针对性修改，重新运行基准测试，运行正确性测试套件，如果结果仍然不理想，则可以继续进行后续步骤。</p><h1 id="How-to-write-a-Goal"><a href="#How-to-write-a-Goal" class="headerlink" title="How to write a Goal"></a>How to write a Goal</h1><p>一个好的Goal不仅仅是一个更大的prompt。它是一份简洁的契约，规定了 Codex 的运作方式、成功的标准以及在尚未达到目标时应该采取的措施。</p><h2 id="最有效的目标通常包含六个要素："><a href="#最有效的目标通常包含六个要素：" class="headerlink" title="最有效的目标通常包含六个要素："></a>最有效的目标通常包含六个要素：</h2><ol><li>结果：工作完成后应该达到的现实状态。</li><li>验证面：证明其有效性的测试、基准测试、报告、工件、命令输出或源材料。</li><li>限制条件：Codex 运行期间哪些方面不能倒退。</li><li>边界：Codex 可以使用的文件、工具、数据、存储库或资源。</li><li>迭代策略：Codex 应该如何在每次尝试后决定下一步要尝试什么。</li><li>阻塞停止条件：当 Codex 应该停止并报告在当前限制下没有可防御的路径时。</li></ol><p>例如：  </p><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">/goal <span class="hljs-variable">&lt;desired end state&gt;</span> verified by <span class="hljs-variable">&lt;specific evidence&gt;</span> while preserving <span class="hljs-variable">&lt;constraints&gt;</span>. Use <span class="hljs-variable">&lt;allowed inputs, tools, or boundaries&gt;</span>. Between iterations, <span class="hljs-variable">&lt;how Codex should choose the next best action&gt;</span>. If blocked or <span class="hljs-keyword">no</span> valid paths remain, <span class="hljs-variable">&lt;what Codex should report and what would unlock progress&gt;</span>.<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>codex</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Qwen3.8 27B部署模型</title>
     <link href="/blog/posts/Qwen3-8-27B%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/"/>
     <url>/blog/posts/Qwen3-8-27B%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B/</url>
