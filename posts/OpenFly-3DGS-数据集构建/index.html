@@ -27,7 +27,7 @@
 <meta property="og:description" content="OpenFly 3DGS 数据集构建全流程操作指南  以 env_gs_badminton_court（羽毛球馆）为例，从零开始走完整条数据流水线： ① 3DGS 场景构建与渲染（aholo3dgs） →② Python 控制无人机飞行 + 捕捉图片（python-controller） →③ OpenFly-Platform 工具链（点云转换 → 语义分割 → 轨迹生成 → BEV 地图 → 指">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-15T07:20:46.000Z">
-<meta property="article:modified_time" content="2026-09-15T10:02:23.768Z">
+<meta property="article:modified_time" content="2026-09-15T10:08:45.177Z">
 <meta property="article:author" content="clearday">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -292,56 +292,7 @@
 <td>ROS2 工作区：seg_gen &#x2F; traj_gen &#x2F; ins_gen</td>
 </tr>
 </tbody></table>
-<h2 id="0-3-环境前置条件"><a href="#0-3-环境前置条件" class="headerlink" title="0.3 环境前置条件"></a>0.3 环境前置条件</h2><table>
-<thead>
-<tr>
-<th>依赖</th>
-<th>用途</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Node.js + npm</td>
-<td>渲染前端</td>
-<td><code>npx tsc</code> &#x2F; <code>npx vite</code></td>
-</tr>
-<tr>
-<td>splat-transform</td>
-<td>ply → sog &#x2F; voxel</td>
-<td><a target="_blank" rel="noopener" href="https://github.com/playcanvas/splat-transform">https://github.com/playcanvas/splat-transform</a></td>
-</tr>
-<tr>
-<td>conda 环境 <code>python-controller</code></td>
-<td>② 的 Python 侧</td>
-<td>Python 3.10（<code>environment.yml</code>）</td>
-</tr>
-<tr>
-<td>conda 环境 <code>openfly</code></td>
-<td>③ 的 Python 侧</td>
-<td>Python 3.10 + rclpy + OpenFly 依赖</td>
-</tr>
-<tr>
-<td>ROS2 Humble</td>
-<td>③ 节点&#x2F;launch</td>
-<td><code>/opt/ros/humble</code></td>
-</tr>
-<tr>
-<td>tool_ws 已编译</td>
-<td>③ 的 ROS2 节点</td>
-<td><code>colcon build</code> 产物在 <code>tool_ws/install</code></td>
-</tr>
-<tr>
-<td>ImageMagick</td>
-<td><code>convert</code> pgm→png</td>
-<td>BEV 地图可视化</td>
-</tr>
-<tr>
-<td>Aholo 3D Studio 账号</td>
-<td>视频重建 3DGS</td>
-<td>导出 .ply 需会员</td>
-</tr>
-</tbody></table>
-<h2 id="0-4-端口速查"><a href="#0-4-端口速查" class="headerlink" title="0.4 端口速查"></a>0.4 端口速查</h2><table>
+<h2 id="0-3-端口速查"><a href="#0-3-端口速查" class="headerlink" title="0.3 端口速查"></a>0.3 端口速查</h2><table>
 <thead>
 <tr>
 <th>端口</th>
@@ -369,15 +320,8 @@
 <td>bridge 侧 <code>listen_port</code>（预留回连端口）</td>
 <td>bridge 监听</td>
 </tr>
-<tr>
-<td>9000</td>
-<td><code>sim_port</code>（原版 SIBR env_bridge 用，本流程不用）</td>
-<td>—</td>
-</tr>
 </tbody></table>
-<hr>
-<h1 id="1-3DGS-场景构建与渲染"><a href="#1-3DGS-场景构建与渲染" class="headerlink" title="1. 3DGS 场景构建与渲染"></a>1. 3DGS 场景构建与渲染</h1><p>目录：<code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></p>
-<h2 id="1-1-场地视频拍摄"><a href="#1-1-场地视频拍摄" class="headerlink" title="1.1 场地视频拍摄"></a>1.1 场地视频拍摄</h2><p>前置条件：一台相机（<strong>手机不行</strong>）。</p>
+<h1 id="1-3DGS-场景构建与渲染"><a href="#1-3DGS-场景构建与渲染" class="headerlink" title="1. 3DGS 场景构建与渲染"></a>1. 3DGS 场景构建与渲染</h1><h2 id="1-1-场地视频拍摄"><a href="#1-1-场地视频拍摄" class="headerlink" title="1.1 场地视频拍摄"></a>1.1 场地视频拍摄</h2><p>前置条件：一台相机（<strong>手机不行</strong>）。</p>
 <p>拍摄要求：</p>
 <ul>
 <li>明亮且稳定的照明（早晨或傍晚）；</li>
@@ -386,19 +330,9 @@
 </ul>
 <p>产出：<code>场地视频.mp4</code>（一段或多段）。</p>
 <h2 id="1-2-Aholo-3D-Studio-重建并导出-ply"><a href="#1-2-Aholo-3D-Studio-重建并导出-ply" class="headerlink" title="1.2 Aholo 3D Studio 重建并导出 .ply"></a>1.2 Aholo 3D Studio 重建并导出 .ply</h2><p>平台：<a target="_blank" rel="noopener" href="https://studio.aholo3d.com/library">https://studio.aholo3d.com/library</a></p>
-<ol>
-<li>进入 <code>My Projects</code> 界面，将视频拖入 <code>3DGS Reconstruction</code> 界面；</li>
-<li>选择 <code>capture type</code>（<code>indoor</code> &#x2F; <code>outdoor</code>）；</li>
-<li>选择构建质量（<code>standard</code> &#x2F; <code>professional</code>）；</li>
-<li>点击 <code>create</code> 开始构建（构建较慢）；</li>
-<li>构建成功后进入项目，<strong>右上方 <code>export</code> 导出 .ply 文件</strong>（导出需要会员）。</li>
-</ol>
-<blockquote>
-<p>免费账号只能用 <code>standard</code> 且只有 10 次机会；Pro 会员可无限 <code>standard</code><br>并可尝试 <code>professional</code>。</p>
-</blockquote>
-<p>产出：<code>badminton_court.ply</code>（3D 高斯点云，本例约 384 MB）。</p>
-<h2 id="1-3-splat-transform-格式转换"><a href="#1-3-splat-transform-格式转换" class="headerlink" title="1.3 splat-transform 格式转换"></a>1.3 splat-transform 格式转换</h2><p>把 .ply 转成 aholo-viewer 需要的渲染文件 <code>.sog</code> 和碰撞文件 <code>.voxel.json</code> &#x2F; <code>.voxel.bin</code>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ① 渲染文件：ply → sog</span><br>splat-transform badminton_court.ply badminton_court.sog<br><br><span class="hljs-comment"># ② 碰撞文件：ply → voxel.json + voxel.bin</span><br>splat-transform badminton_court.ply \<br>    --filter-cluster --seed-pos 0,0,0 \<br>    badminton_court.voxel.json --voxel-floor-fill -K<br></code></pre></td></tr></table></figure>
+<p>导出 ply 文件需要会员。</p>
+<h2 id="1-3-splat-transform-格式转换"><a href="#1-3-splat-transform-格式转换" class="headerlink" title="1.3 splat-transform 格式转换"></a>1.3 splat-transform 格式转换</h2><p>把 .ply 转成 aholo-viewer 需要的渲染文件 <code>.sog</code> 和碰撞文件 <code>.voxel.json</code> , <code>.voxel.bin</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 渲染文件：ply → sog</span><br>splat-transform badminton_court.ply badminton_court.sog<br><br><span class="hljs-comment"># 碰撞文件：ply → voxel.json + voxel.bin</span><br>splat-transform badminton_court.ply \<br>    --filter-cluster --seed-pos 0,0,0 \<br>    badminton_court.voxel.json --voxel-floor-fill -K<br></code></pre></td></tr></table></figure>
 
 <p>参考教程：</p>
 <ul>
