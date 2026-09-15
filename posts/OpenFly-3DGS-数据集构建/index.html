@@ -27,7 +27,7 @@
 <meta property="og:description" content="OpenFly 3DGS 数据集构建全流程操作指南  以 env_gs_badminton_court（羽毛球馆）为例，从零开始走完整条数据流水线： ① 3DGS 场景构建与渲染（aholo3dgs） →② Python 控制无人机飞行 + 捕捉图片（python-controller） →③ OpenFly-Platform 工具链（点云转换 → 语义分割 → 轨迹生成 → BEV 地图 → 指">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-15T07:20:46.000Z">
-<meta property="article:modified_time" content="2026-09-15T07:34:40.283Z">
+<meta property="article:modified_time" content="2026-09-15T09:46:08.262Z">
 <meta property="article:author" content="clearday">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -379,7 +379,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h1 id="1-3DGS-场景构建与渲染（aholo3dgs）"><a href="#1-3DGS-场景构建与渲染（aholo3dgs）" class="headerlink" title="1. 3DGS 场景构建与渲染（aholo3dgs）"></a>1. 3DGS 场景构建与渲染（aholo3dgs）</h1><p>目录：<code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></p>
+<h1 id="1-3DGS-场景构建与渲染"><a href="#1-3DGS-场景构建与渲染" class="headerlink" title="1. 3DGS 场景构建与渲染"></a>1. 3DGS 场景构建与渲染</h1><p>目录：<code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></p>
 <h2 id="1-1-场地视频拍摄"><a href="#1-1-场地视频拍摄" class="headerlink" title="1.1 场地视频拍摄"></a>1.1 场地视频拍摄</h2><p>前置条件：一台相机（<strong>手机不行</strong>）。</p>
 <p>拍摄要求：</p>
 <ul>
@@ -438,7 +438,7 @@
 </tbody></table>
 <p>第二个页面的 <code>?controller=</code> 参数必须指向 <code>python-controller</code> 的 HTTP 服务器地址<br>（默认 <code>http://127.0.0.1:8765</code>），否则页面拿不到命令。</p>
 <hr>
-<h1 id="2-Python-控制无人机移动并捕捉图片（python-controller）"><a href="#2-Python-控制无人机移动并捕捉图片（python-controller）" class="headerlink" title="2. Python 控制无人机移动并捕捉图片（python-controller）"></a>2. Python 控制无人机移动并捕捉图片（python-controller）</h1><p>目录：<code>/home/yaojianhang_25/workspace/VLA/python-controller</code></p>
+<h1 id="2-Python-控制无人机移动并捕捉图片"><a href="#2-Python-控制无人机移动并捕捉图片" class="headerlink" title="2. Python 控制无人机移动并捕捉图片"></a>2. Python 控制无人机移动并捕捉图片</h1><p>目录：<code>/home/yaojianhang_25/workspace/VLA/python-controller</code></p>
 <h2 id="2-1-工作原理"><a href="#2-1-工作原理" class="headerlink" title="2.1 工作原理"></a>2.1 工作原理</h2><p><code>drone_controller.py</code> 用<strong>纯 Python 标准库</strong>实现一个 HTTP 长轮询控制器：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">浏览器页面 (python-control.html / python-control.ts)<br>        │  GET  /poll?clientId=xxx   （长轮询，25s 超时，拿命令）<br>        │  POST /cmd                （执行结果：位姿/截图/深度）<br>        │  POST /event              （碰撞等异步事件）<br>        ▼<br>drone_controller.py HTTP 服务器 :8765<br>        ▲<br>        │  DroneController Python API<br>Python 脚本（example_client.py / openfly_bridge.py）<br></code></pre></td></tr></table></figure>
 
@@ -613,18 +613,18 @@
 <p>生成流程（三段式，目标先几何确定、不让 VLM 猜目标）：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">pose.jsonl + seg landmark<br>      │<br>Stage 1  几何确定 target_context（保留 instance_id，如 badminton_court_2 的 edge midpoint 1）<br>      │<br>Stage 2  VLM 看首帧图，生成结构化视觉描述 + 自然语言 instruction<br>      │<br>Stage 3  VLM / 规则自动质检<br>      │<br>最终 instruction + debug 信息<br></code></pre></td></tr></table></figure>
 
-<p><strong>① 生成 traj_lists（轨迹目录清单 json）</strong></p>
+<p><strong>生成 traj_lists（轨迹目录清单 json）</strong></p>
 <p><code>traj_lists</code> 就是一个 <strong>JSON 数组，元素为轨迹目录的绝对路径</strong><br>（没有自动生成脚本，手动列目录即可）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /VLM/yaojianhang_25/VLN/OpenFly-Platform<br>python3 - &lt;&lt;<span class="hljs-string">&#x27;EOF&#x27;</span><br>import json, pathlib<br>root = pathlib.Path(<span class="hljs-string">&quot;uav_vln_data/env_gs_badminton_court/vla_short&quot;</span>).resolve()<br><span class="hljs-built_in">dirs</span> = sorted(str(p) <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> root.iterdir() <span class="hljs-keyword">if</span> p.is_dir())<br>out = <span class="hljs-string">&quot;tool_ws/src/ins_gen/traj_lists/env_gs_badminton_court_vla_short_train.json&quot;</span><br>pathlib.Path(out).write_text(json.dumps(<span class="hljs-built_in">dirs</span>, indent=2) + <span class="hljs-string">&quot;\n&quot;</span>)<br><span class="hljs-built_in">print</span>(f<span class="hljs-string">&quot;&#123;len(dirs)&#125; trajectories -&gt; &#123;out&#125;&quot;</span>)<br>EOF<br></code></pre></td></tr></table></figure>
 
-<p><strong>② 先执行不调用模型的首帧几何唯一性审计</strong></p>
+<p><strong>先执行不调用模型的首帧几何唯一性审计</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /VLM/yaojianhang_25/VLN/OpenFly-Platform<br>conda activate openfly<br><br>python3 tool_ws/src/ins_gen/audit_grounding.py \<br>    --json tool_ws/src/ins_gen/traj_lists/env_gs_badminton_court_vla_short_train.json<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>纯几何计算，不调 VLM：检查每条轨迹首帧中目标是否可见、是否唯一<br>（利用 <code>000000_front_depth16.png</code> 做遮挡判断），避免生成指代模糊的指令；</li>
 <li>产出详细报告 <code>tool_ws/src/ins_gen/traj_lists/..._vla_short_train_grounding_audit.json</code>。</li>
 </ul>
-<p><strong>③ GPT 生成 instruction</strong></p>
+<p><strong>GPT 生成 instruction</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /VLM/yaojianhang_25/VLN/OpenFly-Platform<br>conda activate openfly<br><br>python3 tool_ws/src/ins_gen/gpt_generation.py \<br>    --json tool_ws/src/ins_gen/traj_lists/env_gs_badminton_court_vla_short_train.json \<br>    --<span class="hljs-built_in">type</span> train<br></code></pre></td></tr></table></figure>
 
 <p>前置配置：<code>tool_ws/src/ins_gen/gpt_api_config.json</code>，每项为一个 API 配置：</p>
