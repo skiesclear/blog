@@ -27,7 +27,7 @@
 <meta property="og:description" content="OpenFly 3DGS 数据集构建全流程操作指南  以 env_gs_badminton_court（羽毛球馆）为例，从零开始走完整条数据流水线： ① 3DGS 场景构建与渲染（aholo3dgs） →② Python 控制无人机飞行 + 捕捉图片（python-controller） →③ OpenFly-Platform 工具链（点云转换 → 语义分割 → 轨迹生成 → BEV 地图 → 指">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-15T07:20:46.000Z">
-<meta property="article:modified_time" content="2026-09-15T07:30:58.333Z">
+<meta property="article:modified_time" content="2026-09-15T07:34:40.283Z">
 <meta property="article:author" content="clearday">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -379,7 +379,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h1 id="阶段一：3DGS-场景构建与渲染（aholo3dgs）"><a href="#阶段一：3DGS-场景构建与渲染（aholo3dgs）" class="headerlink" title="阶段一：3DGS 场景构建与渲染（aholo3dgs）"></a>阶段一：3DGS 场景构建与渲染（aholo3dgs）</h1><p>目录：<code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></p>
+<h1 id="1-3DGS-场景构建与渲染（aholo3dgs）"><a href="#1-3DGS-场景构建与渲染（aholo3dgs）" class="headerlink" title="1. 3DGS 场景构建与渲染（aholo3dgs）"></a>1. 3DGS 场景构建与渲染（aholo3dgs）</h1><p>目录：<code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></p>
 <h2 id="1-1-场地视频拍摄"><a href="#1-1-场地视频拍摄" class="headerlink" title="1.1 场地视频拍摄"></a>1.1 场地视频拍摄</h2><p>前置条件：一台相机（<strong>手机不行</strong>）。</p>
 <p>拍摄要求：</p>
 <ul>
@@ -438,7 +438,7 @@
 </tbody></table>
 <p>第二个页面的 <code>?controller=</code> 参数必须指向 <code>python-controller</code> 的 HTTP 服务器地址<br>（默认 <code>http://127.0.0.1:8765</code>），否则页面拿不到命令。</p>
 <hr>
-<h1 id="阶段二：Python-控制无人机移动并捕捉图片（python-controller）"><a href="#阶段二：Python-控制无人机移动并捕捉图片（python-controller）" class="headerlink" title="阶段二：Python 控制无人机移动并捕捉图片（python-controller）"></a>阶段二：Python 控制无人机移动并捕捉图片（python-controller）</h1><p>目录：<code>/home/yaojianhang_25/workspace/VLA/python-controller</code></p>
+<h1 id="2-Python-控制无人机移动并捕捉图片（python-controller）"><a href="#2-Python-控制无人机移动并捕捉图片（python-controller）" class="headerlink" title="2. Python 控制无人机移动并捕捉图片（python-controller）"></a>2. Python 控制无人机移动并捕捉图片（python-controller）</h1><p>目录：<code>/home/yaojianhang_25/workspace/VLA/python-controller</code></p>
 <h2 id="2-1-工作原理"><a href="#2-1-工作原理" class="headerlink" title="2.1 工作原理"></a>2.1 工作原理</h2><p><code>drone_controller.py</code> 用<strong>纯 Python 标准库</strong>实现一个 HTTP 长轮询控制器：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">浏览器页面 (python-control.html / python-control.ts)<br>        │  GET  /poll?clientId=xxx   （长轮询，25s 超时，拿命令）<br>        │  POST /cmd                （执行结果：位姿/截图/深度）<br>        │  POST /event              （碰撞等异步事件）<br>        ▼<br>drone_controller.py HTTP 服务器 :8765<br>        ▲<br>        │  DroneController Python API<br>Python 脚本（example_client.py / openfly_bridge.py）<br></code></pre></td></tr></table></figure>
 
@@ -515,7 +515,7 @@
 <p>修改 <code>aholo3dgs/python-control.ts</code> 后，必须回到 aholo3dgs 目录重新<br><code>npx tsc</code> 并重启 Vite &#x2F; 刷新浏览器页面，Python 侧才能生效。</p>
 </blockquote>
 <hr>
-<h1 id="阶段三：OpenFly-Platform-数据工具链"><a href="#阶段三：OpenFly-Platform-数据工具链" class="headerlink" title="阶段三：OpenFly-Platform 数据工具链"></a>阶段三：OpenFly-Platform 数据工具链</h1><p>目录：<code>/VLM/yaojianhang_25/VLN/OpenFly-Platform</code></p>
+<h1 id="3-OpenFly-Platform-数据工具链"><a href="#3-OpenFly-Platform-数据工具链" class="headerlink" title="3. OpenFly-Platform 数据工具链"></a>3. OpenFly-Platform 数据工具链</h1><p>目录：<code>/VLM/yaojianhang_25/VLN/OpenFly-Platform</code></p>
 <p>流水线：<strong>PLY → PCD 点云</strong> → <strong>语义分割（人工标注 landmark）</strong> →<br><strong>轨迹生成（A* + 逐帧渲染采集）</strong> → <strong>BEV 地图</strong> → <strong>指令生成（审计 + GPT）</strong>。</p>
 <h2 id="3-0-环境与构建（一次性）"><a href="#3-0-环境与构建（一次性）" class="headerlink" title="3.0 环境与构建（一次性）"></a>3.0 环境与构建（一次性）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># conda 环境（首次）</span><br>conda create -n openfly python=3.10 -y<br>conda activate openfly<br><span class="hljs-built_in">cd</span> /VLM/yaojianhang_25/VLN/OpenFly-Platform<br>pip install -r requirements.txt<br>pip install aiofiles          <span class="hljs-comment"># ins_gen 需要（gpt_generation.py）</span><br><br><span class="hljs-comment"># ROS2 依赖（首次）</span><br><span class="hljs-built_in">sudo</span> apt install libgoogle-glog-dev ros-humble-pcl-ros nlohmann-json3-dev<br><br><span class="hljs-comment"># 编译 tool_ws（seg_gen / traj_gen 节点；首次或改过 C++ 后）</span><br><span class="hljs-built_in">cd</span> tool_ws<br>colcon build --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3<br><span class="hljs-built_in">cd</span> ..<br></code></pre></td></tr></table></figure>
 
