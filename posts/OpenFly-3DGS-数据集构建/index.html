@@ -27,7 +27,7 @@
 <meta property="og:description" content="OpenFly 3DGS 数据集构建全流程操作指南  以 env_gs_badminton_court（羽毛球馆）为例，从零开始走完整条数据流水线： ① 3DGS 场景构建与渲染（aholo3dgs） →② Python 控制无人机飞行 + 捕捉图片（python-controller） →③ OpenFly-Platform 工具链（点云转换 → 语义分割 → 轨迹生成 → BEV 地图 → 指">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-15T07:20:46.000Z">
-<meta property="article:modified_time" content="2026-09-15T09:59:00.631Z">
+<meta property="article:modified_time" content="2026-09-15T10:02:23.768Z">
 <meta property="article:author" content="clearday">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -277,24 +277,21 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>① 场景构建&#x2F;渲染</td>
-<td><code>/home/yaojianhang_25/workspace/3dGS/aholo3dgs</code></td>
+<td>场景构建&#x2F;渲染</td>
+<td><code>aholo3dgs</code></td>
 <td>Aholo viewer 渲染前端（TypeScript + Vite）</td>
 </tr>
 <tr>
-<td>② Python 控制</td>
-<td><code>/home/yaojianhang_25/workspace/VLA/python-controller</code></td>
-<td>无人机控制 HTTP 服务器 + OpenFly 适配桥</td>
+<td>Python 控制</td>
+<td><code>python-controller</code></td>
+<td>无人机控制 HTTP 服务器 + OpenFly中继</td>
 </tr>
 <tr>
-<td>③ 数据工具链</td>
-<td><code>/VLM/yaojianhang_25/VLN/OpenFly-Platform</code></td>
+<td>数据工具链</td>
+<td><code>OpenFly-Platform</code></td>
 <td>ROS2 工作区：seg_gen &#x2F; traj_gen &#x2F; ins_gen</td>
 </tr>
 </tbody></table>
-<blockquote>
-<p>注意：<code>/home/yaojianhang_25/workspace/VLN/OpenFly-Platform</code> 与<br><code>/VLM/yaojianhang_25/VLN/OpenFly-Platform</code> 是<strong>同一个目录</strong>（绑定挂载，inode 相同），<br>两种写法可以混用。本文档以 <code>/VLM/yaojianhang_25/VLN/OpenFly-Platform</code> 为准。</p>
-</blockquote>
 <h2 id="0-3-环境前置条件"><a href="#0-3-环境前置条件" class="headerlink" title="0.3 环境前置条件"></a>0.3 环境前置条件</h2><table>
 <thead>
 <tr>
