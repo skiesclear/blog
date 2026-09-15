@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://skiesclear.github.io/blog/img/260915/nature_skills_catalogue.png">
 <meta property="og:image" content="http://skiesclear.github.io/blog/img/260915/nature_paper2ppt_skill_catalogue.png">
 <meta property="article:published_time" content="2026-09-15T13:06:52.000Z">
-<meta property="article:modified_time" content="2026-09-15T13:51:56.790Z">
+<meta property="article:modified_time" content="2026-09-15T13:54:57.806Z">
 <meta property="article:author" content="clearday">
 <meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Skill">
@@ -307,6 +307,7 @@
 <hr>
 <p>虽然Agent Skill也有可以有连数据的代码，但是能干并不代表适合。<br>MCP本质上是独立运行的程序，Agent Skill本质上是说明文档。<br>所以Agent Skill更适合轻量的脚本，处理些简单逻辑，但在安全性和稳定性不及MCP，很多场景下将Agent SKill和MCP结合起来做一些更工程化的工作。</p>
 <h1 id="Nature-Skills-举例"><a href="#Nature-Skills-举例" class="headerlink" title="Nature Skills 举例"></a>Nature Skills 举例</h1><p>Nature Skills是多个skill的集合<br><img src="/blog/img/260915/nature_skills_catalogue.png" srcset="/blog/img/loading.gif" lazyload alt="Nature_Skills_Catalogue"></p>
+<p>属于是一个Skill Registry包含很多skills</p>
 <figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs 1c">用户问题<br>      <span class="hljs-string">|</span><br>      v<br>Skill discovery<br>      <span class="hljs-string">|</span><br>      <span class="hljs-punctuation">+</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span> nature<span class="hljs-punctuation">-</span>image2ppt/SKILL.md<br>      <span class="hljs-string">|</span><br>      <span class="hljs-punctuation">+</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span> nature<span class="hljs-punctuation">-</span>photo<span class="hljs-punctuation">-</span>edit/SKILL.md<br>      <span class="hljs-string">|</span><br>      <span class="hljs-punctuation">+</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span> nature<span class="hljs-punctuation">-</span>video/SKILL.md<br>      <span class="hljs-string">|</span><br>      v<br>匹配最高相关skill<br></code></pre></td></tr></table></figure>
 <p>也就是说所有子 Skill 平级参与检索。<br>这样的设计被称为：扁平 Skill Registry<br>优点：</p>
 <ul>
