@@ -27,7 +27,7 @@
 <meta property="og:description" content="OpenFly 3DGS 数据集构建全流程操作指南  以 env_gs_badminton_court（羽毛球馆）为例，从零开始走完整条数据流水线： ① 3DGS 场景构建与渲染（aholo3dgs） →② Python 控制无人机飞行 + 捕捉图片（python-controller） →③ OpenFly-Platform 工具链（点云转换 → 语义分割 → 轨迹生成 → BEV 地图 → 指">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-15T07:20:46.000Z">
-<meta property="article:modified_time" content="2026-09-15T12:56:49.664Z">
+<meta property="article:modified_time" content="2026-09-16T05:59:19.071Z">
 <meta property="article:author" content="clearday">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -342,6 +342,22 @@
 <blockquote>
 <p>本项目的 <code>resource/</code> 里还有一份 <code>badminton_court.collision.glb</code>, 这是无人机的模型<br>（自定义碰撞模型，<code>python-control.ts</code> 中 <code>DRONE_MODEL_URL</code> 使用），<br>替换场景时同样需要为新场景准备并放入 <code>resource/</code>。</p>
 </blockquote>
+<hr>
+<ol>
+<li>如果要删除一些离散点云，还可以加入参数</li>
+</ol>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs routeros">-F, --filter-floaters  [size,op,min]    <span class="hljs-built_in">Remove</span> Gaussians <span class="hljs-keyword">not</span> contributing <span class="hljs-keyword">to</span> any solid voxel.<br>                                          Evaluates each Gaussian at occupied voxel centers.<br>                                          Default: <span class="hljs-attribute">size</span>=0.05, <span class="hljs-attribute">opacity</span>=0.1, <span class="hljs-attribute">min</span>=0.004 (1/255).<br>                                          Bare flag (<span class="hljs-literal">no</span> value) uses all defaults.<br>-C, --filter-cluster   [res,op,min]     Keep only the connected cluster at --seed-pos.<br>                                          GPU-voxelizes at coarse resolution (res world units/voxel).<br>                                          Default: <span class="hljs-attribute">res</span>=1.0, <span class="hljs-attribute">opacity</span>=0.999, <span class="hljs-attribute">min</span>=0.1.<br>                                          Bare flag (<span class="hljs-literal">no</span> value) uses all defaults.<br></code></pre></td></tr></table></figure>
+<p>具体可见：<a target="_blank" rel="noopener" href="https://developer.playcanvas.com/user-manual/splat-transform/">https://developer.playcanvas.com/user-manual/splat-transform/</a></p>
+<ol start="2">
+<li>如果要使地面和墙面更加平滑：</li>
+</ol>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-number">1</span>）默认体素大小：<br>  <span class="hljs-attr">--voxel-size</span> <span class="hljs-number">0.05</span><br>也就是<span class="hljs-number">5cm</span>，可以提升到<span class="hljs-number">10cm</span><br>  <span class="hljs-attr">--voxel-size</span> <span class="hljs-number">0.1</span><br>虽然更平滑，但是会损失细节<br><span class="hljs-number">2</span>）决定voxel多大程度上被认为是solid，默认：<br>  <span class="hljs-attr">--voxel-opacity</span> <span class="hljs-number">0.1</span><br>适当提高这个值，会减少墙体表面的毛刺，如<br>  <span class="hljs-attr">--voxel-opacity</span> <span class="hljs-number">0.2</span><br>但是如果太高，会把真正稀疏的墙面也删掉<br><span class="hljs-number">3</span>) 官方也提供了平滑表面的选项<br><span class="hljs-attr">--collision-mesh</span> smooth<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>渲染过程中，地面有很多黑洞或者墙壁渲染状况不好<br>调整下面一些渲染程序中的参数：</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>) <span class="hljs-attribute">opacity</span>  透明度<br><span class="hljs-number">2</span>) light 亮度<br><span class="hljs-number">3</span>) <span class="hljs-attribute">scale</span> 高斯球的放缩：沿表面适度扩大，法向限制厚度<br></code></pre></td></tr></table></figure>
+
 <h2 id="1-4-放置资源并同步代码路径"><a href="#1-4-放置资源并同步代码路径" class="headerlink" title="1.4 放置资源并同步代码路径"></a>1.4 放置资源并同步代码路径</h2><p>把转换产物放进渲染项目的 <code>resource/</code> 目录：</p>
 <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix">resource<span class="hljs-symbol">/</span><br>├── badminton_court.sog          <span class="hljs-comment"># 3DGS 渲染文件</span><br>├── badminton_court.voxel.json   <span class="hljs-comment"># 体素碰撞元信息</span><br>├── badminton_court.voxel.bin    <span class="hljs-comment"># 体素碰撞数据</span><br>└── drone.glb                    <span class="hljs-comment"># 无人机外观模型</span><br></code></pre></td></tr></table></figure>
 
