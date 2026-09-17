@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>speech-to-speech</title>
+      <link href="/blog/posts/speech-to-speech/"/>
+      <url>/blog/posts/speech-to-speech/</url>
+      
+        <content type="html"><![CDATA[<p>网络情况：<br>三台服务器：<br>运行模型和webui的服务器A（具有较好的gpu，但是只开放ssh的22端口）<br>服务器B，与A在同一局域网下，而且和C在同一个wireguard局域网下<br>云服务器C</p><hr><p>现在先给一下运行命令，稍后完善：<br>终端一(运行speech-to-speech的推理框架)：</p><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">conda activate speech2speech<br><br>speech-to-speech serve   <span class="hljs-params">--host</span> 0.0.0.0   <span class="hljs-params">--port</span> 8765   <span class="hljs-params">--stt</span> parakeet-tdt   <span class="hljs-params">--parakeet_tdt_device</span> cpu   <span class="hljs-params">--llm_backend</span> chat-completions   <span class="hljs-params">--model_name</span> Qwen3.8-27B-FP8   <span class="hljs-params">--responses_api_base_url</span> http:<span class="hljs-string">//127.0.0.1</span><span class="hljs-function">:30001</span>/v1   <span class="hljs-params">--responses_api_api_key</span> <span class="hljs-string">&quot;&quot;</span>   <span class="hljs-params">--responses_api_stream</span>   <span class="hljs-params">--tts</span> kokoro   <span class="hljs-params">--kokoro_device</span> cpu   <span class="hljs-params">--enable_live_transcription</span>   <span class="hljs-params">--log_level</span> info<br></code></pre></td></tr></table></figure><p>终端二（将webui和speech-to-speech运行端口开放给跳板机）：</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ssh</span> -N -R <span class="hljs-number">17860</span>:<span class="hljs-number">127.0.0.1:7860</span> -R <span class="hljs-number">18765</span>:<span class="hljs-number">127.0.0.1:8765</span> yaojianhang_25@<span class="hljs-number">59.72.109.26</span> -p <span class="hljs-number">2022</span><br></code></pre></td></tr></table></figure><p>终端三（运行webui）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> SPEECH_TO_SPEECH_URL=wss://yaojh25.asia/v1/realtime<br>uvicorn   --app-dir demo   server:app   --host 0.0.0.0   --port 7860<br></code></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> TTS </tag>
+            
+            <tag> STT </tag>
+            
+            <tag> Qwen3.8 </tag>
+            
+            <tag> speech-to-speech </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Agent Skills</title>
       <link href="/blog/posts/Agent-Skills/"/>
       <url>/blog/posts/Agent-Skills/</url>
