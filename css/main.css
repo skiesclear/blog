@@ -890,6 +890,8 @@ body.sidebar-nav-open .left-navbar {
 .tocbot-list ol {
   list-style: none;
   padding-left: 1rem;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
 }
 .tocbot-list a {
   font-size: 0.95rem;
@@ -928,12 +930,13 @@ body.sidebar-nav-open .left-navbar {
   font-weight: bold;
   color: var(--link-hover-color);
 }
+.tocbot-is-collapsible {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
 .tocbot-is-collapsed {
   max-height: 0;
-}
-.tocbot-is-collapsible {
-  overflow: hidden;
-  transition: all 0.3s ease-in-out;
 }
 .toc-list-item {
   padding: 0.1rem 0;

@@ -19,15 +19,15 @@
   <meta name="author" content="clearday">
   <meta name="keywords" content="">
   
-    <meta name="description" content="网络情况：三台服务器：运行模型和webui的服务器A（具有较好的gpu，但是只开放ssh的22端口）服务器B，与A在同一局域网下，而且和C在同一个wireguard局域网下云服务器C  现在先给一下运行命令，稍后完善：终端一(运行speech-to-speech的推理框架)： 123conda activate speech2speechspeech-to-speech serve   --hos">
+    <meta name="description" content="介绍Speech To SpeechSpeechToSpeech官方这样介绍：  A low-latency, fully modular voice-agent pipeline: VAD -&gt; STT -&gt; LLM -&gt; TTS, exposed through the core OpenAI Realtime GA event set over WebSocket and">
 <meta property="og:type" content="article">
 <meta property="og:title" content="speech-to-speech">
 <meta property="og:url" content="http://skiesclear.github.io/posts/speech-to-speech/index.html">
 <meta property="og:site_name" content="Clearday Blog">
-<meta property="og:description" content="网络情况：三台服务器：运行模型和webui的服务器A（具有较好的gpu，但是只开放ssh的22端口）服务器B，与A在同一局域网下，而且和C在同一个wireguard局域网下云服务器C  现在先给一下运行命令，稍后完善：终端一(运行speech-to-speech的推理框架)： 123conda activate speech2speechspeech-to-speech serve   --hos">
+<meta property="og:description" content="介绍Speech To SpeechSpeechToSpeech官方这样介绍：  A low-latency, fully modular voice-agent pipeline: VAD -&gt; STT -&gt; LLM -&gt; TTS, exposed through the core OpenAI Realtime GA event set over WebSocket and">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-09-17T04:38:05.000Z">
-<meta property="article:modified_time" content="2026-09-17T04:45:11.355Z">
+<meta property="article:modified_time" content="2026-09-17T11:36:36.101Z">
 <meta property="article:author" content="clearday">
 <meta property="article:tag" content="Qwen3.8">
 <meta property="article:tag" content="STT">
@@ -263,7 +263,52 @@
             
               <div class="markdown-body">
                 
-                <p>网络情况：<br>三台服务器：<br>运行模型和webui的服务器A（具有较好的gpu，但是只开放ssh的22端口）<br>服务器B，与A在同一局域网下，而且和C在同一个wireguard局域网下<br>云服务器C</p>
+                <h1 id="介绍Speech-To-Speech"><a href="#介绍Speech-To-Speech" class="headerlink" title="介绍Speech To Speech"></a>介绍Speech To Speech</h1><p><a target="_blank" rel="noopener" href="https://github.com/huggingface/speech-to-speech">SpeechToSpeech</a>官方这样介绍：</p>
+<blockquote>
+<p>A low-latency, fully modular voice-agent pipeline: VAD -&gt; STT -&gt; LLM -&gt; TTS, exposed through the core OpenAI Realtime GA event set over WebSocket and WebRTC.<br>其中名词有</p>
+</blockquote>
+<ul>
+<li>VAD（Voice Activity Detection）：判断：当前有没有人在说话。</li>
+<li>STT（Speech To Text）：语音转文字</li>
+<li>TTS（Text To Speech）：文字转语音</li>
+<li>OpenAI Realtime GA event set<ul>
+<li>General Availability （GA）：正式稳定版本</li>
+<li>Realtime API 是 OpenAI 为实时语音设计的一套协议</li>
+</ul>
+</li>
+<li>WebSocket：一种实时双向通信协议。（目的：数据通信，延迟低）</li>
+<li>WebRTC（Web Real-Time Communication）：网页实时通信技术。（实时音视频，延迟更低）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">component</th>
+<th align="center">backend</th>
+<th align="center">install</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">VAD</td>
+<td align="center"><a target="_blank" rel="noopener" href="https://github.com/snakers4/silero-vad">Silero VAD v5</a></td>
+<td align="center">built-in</td>
+</tr>
+<tr>
+<td align="center">STT</td>
+<td align="center"><a target="_blank" rel="noopener" href="https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3">Parakeet TDT</a></td>
+<td align="center">build-in</td>
+</tr>
+<tr>
+<td align="center">LLM</td>
+<td align="center">Qwen 3.8 27B FP8</td>
+<td align="center">local</td>
+</tr>
+<tr>
+<td align="center">TTS</td>
+<td align="center"><a target="_blank" rel="noopener" href="https://huggingface.co/hexgrad/Kokoro-82M">Kokoro-82M</a></td>
+<td align="center">external</td>
+</tr>
+</tbody></table>
+<p>网络情况：<br>三台服务器：<br>运行模型和webui的服务器A（具有较好的gpu，但是只开放ssh的22端口）<br>服务器B，与A在同一局域网下，而且和C在同一个wireguard局域网下<br>云服务器C</p>
 <hr>
 <p>现在先给一下运行命令，稍后完善：<br>终端一(运行speech-to-speech的推理框架)：</p>
 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">conda activate speech2speech<br><br>speech-to-speech serve   <span class="hljs-params">--host</span> 0.0.0.0   <span class="hljs-params">--port</span> 8765   <span class="hljs-params">--stt</span> parakeet-tdt   <span class="hljs-params">--parakeet_tdt_device</span> cpu   <span class="hljs-params">--llm_backend</span> chat-completions   <span class="hljs-params">--model_name</span> Qwen3.8-27B-FP8   <span class="hljs-params">--responses_api_base_url</span> http:<span class="hljs-string">//127.0.0.1</span><span class="hljs-function">:30001</span>/v1   <span class="hljs-params">--responses_api_api_key</span> <span class="hljs-string">&quot;&quot;</span>   <span class="hljs-params">--responses_api_stream</span>   <span class="hljs-params">--tts</span> kokoro   <span class="hljs-params">--kokoro_device</span> cpu   <span class="hljs-params">--enable_live_transcription</span>   <span class="hljs-params">--log_level</span> info<br></code></pre></td></tr></table></figure>
@@ -273,6 +318,7 @@
 
 <p>终端三（运行webui）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> SPEECH_TO_SPEECH_URL=wss://yaojh25.asia/v1/realtime<br>uvicorn   --app-dir demo   server:app   --host 0.0.0.0   --port 7860<br></code></pre></td></tr></table></figure>
+<p>我要将~&#x2F;workspace&#x2F;speech-to-speech&#x2F;demo下的内容做成一个app，即当前项目，我需要使用Ktolin和java实现其中的内容。 我之前让你分析过内容如下。<br>Demo 客户端到底在干什么<br>从 main.js 看,它走的是 OpenAI Realtime 协议(WebSocket):<br>1.<br>抓麦克风 → 音频切成小块 → base64 → 发 input_audio_buffer.append 事件<br>2.<br>收后端的 response.audio.delta 事件(base64 PCM 音频)→ 解码 → 播放<br>3.<br>收 response.audio_transcript.delta 等文本事件 → 显示字幕<br>VAD&#x2F;STT&#x2F;VLM&#x2F;TTS 全在后端做,客户端就是个”音频管道 + 事件收发器”。所以 App 只需要:<br>原生 App 的对应实现<br>Demo 里的东西                Android 原生做法 ━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 麦克风采集 (getUserMedia)    AudioRecord:16kHz &#x2F; mono &#x2F; PCM16,约 30ms 一块,base64 后发 WebSocket ───────────────────────────  ───────────────────────────────────<br>───────────────────────────────── WebSocket 收发               OkHttp WebSocket,连 wss(s):&#x2F;&#x2F;你的后端&#x2F;v1&#x2F;realtime ───────────────────────────  ───────────────────────────────────────────────────────────────────── 播放 TTS 音频                AudioTrack:24kHz &#x2F; PCM16 流式写入(Realtime 输出是 24k) ───────────────────────────  ───────────────────────────────────────────────────────────────────── Orb 界面 &#x2F; 字幕              一个 Activity(Compose),按钮 + 文本列表 ───────────────────────────  ───────────────────────────────────────────────────────────────────── Settings 里的后端 URL        一个输入框,存 SharedPreferences,启动时连 ───────────────────────────  ───────────────────────────────────────────────────────────────────── 权限                         只需 RECORD_AUDIO<br>核心代码量不大,大概:<br>•<br>RealtimeClient.kt:OkHttp WebSocket,连上后发 session.update(voice、input_audio_format: pcm16、output_audio_format: pcm16、instructions),然后按事件类型分发处理<br>•<br>AudioRecorder.kt &#x2F; AudioPlayer.kt:采集和播放<br>•<br>MainActivity:UI + 生命周期管理<br>两个值得注意的点:<br>1.<br>打断(barge-in):用户开口时,后端(开 server VAD 的话)会发 input_audio_buffer.speech_started,这时要立刻停掉 AudioTrack 播放并可选发 response.cancel,否则会出现”自己听自己”的串音。<br>2.<br>后端地址格式:直接模式就是 http(s):&#x2F;&#x2F;host:port → 客户端自己拼 &#x2F;v1&#x2F;realtime(main.js 里就是这么处理的)。如果你的后端是 HF Space 的 LB 模式,客户端还要先走 POST &#x2F;api&#x2F;session 拿真正的 session URL——建议先用直连模式(自部署的 speech-to- speech 服务器或直连地址),最省事。<br>所以你的设想成立:App &#x3D; OkHttp WebSocket + AudioRecord + AudioTrack + 一个 URL 输入框,到时候填 backend 链接就能用。<br>我说一下对UI的要求，语音的按钮和声音的按钮横着排列在上方。 下面显示文字记录。右上方有三个点，是配置设置的地方，其他的内容你可以自己搭配一下。</p>
 
                 
               </div>
@@ -520,13 +566,31 @@
         }
         updateTocToggle($li, $childList);
       });
+      function animateTocCollapse($childList) {
+        var el = $childList[0];
+        if ($childList.hasClass('tocbot-is-collapsed')) {
+          // 展开：从 0 过渡到自然高度，过渡结束后释放 max-height
+          $childList.removeClass('tocbot-is-collapsed');
+          $childList.css('max-height', el.scrollHeight + 'px');
+        } else {
+          // 折叠：先固定当前高度，再过渡到 0
+          $childList.css('max-height', el.scrollHeight + 'px');
+          void el.offsetHeight;
+          $childList.addClass('tocbot-is-collapsed');
+          $childList.css('max-height', '0');
+        }
+        clearTimeout(el.__tocCollapseTimer);
+        el.__tocCollapseTimer = setTimeout(function() {
+          $childList.css('max-height', '');
+        }, 350);
+      }
       jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
         e.preventDefault();
         e.stopPropagation();
         var $li = jQuery(this).parent('.toc-list-item');
         var $childList = $li.children('ol');
         if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
+        animateTocCollapse($childList);
         updateTocToggle($li, $childList);
       });
       if (!window.__tocToggleObserver) {

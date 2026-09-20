@@ -525,13 +525,31 @@
         }
         updateTocToggle($li, $childList);
       });
+      function animateTocCollapse($childList) {
+        var el = $childList[0];
+        if ($childList.hasClass('tocbot-is-collapsed')) {
+          // 展开：从 0 过渡到自然高度，过渡结束后释放 max-height
+          $childList.removeClass('tocbot-is-collapsed');
+          $childList.css('max-height', el.scrollHeight + 'px');
+        } else {
+          // 折叠：先固定当前高度，再过渡到 0
+          $childList.css('max-height', el.scrollHeight + 'px');
+          void el.offsetHeight;
+          $childList.addClass('tocbot-is-collapsed');
+          $childList.css('max-height', '0');
+        }
+        clearTimeout(el.__tocCollapseTimer);
+        el.__tocCollapseTimer = setTimeout(function() {
+          $childList.css('max-height', '');
+        }, 350);
+      }
       jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
         e.preventDefault();
         e.stopPropagation();
         var $li = jQuery(this).parent('.toc-list-item');
         var $childList = $li.children('ol');
         if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
+        animateTocCollapse($childList);
         updateTocToggle($li, $childList);
       });
       if (!window.__tocToggleObserver) {
