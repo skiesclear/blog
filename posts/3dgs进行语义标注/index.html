@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/guitar.png?v=20260809">
+  <link rel="icon" href="/blog/img/guitar.png?v=20260809">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="clearday">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3DGS 语义几何标注工具使用说明本文档介绍 aholo3dgs&#x2F;semantic-annotator.html。该页面用于直接在 3D Gaussian Splatting 场景中标注具有稳定三维坐标的语义实例，并导出 OpenFly 数据集工具链可读取的 object_anchors_&lt;environment&gt;.json。 标注器是独立页面，不替换也不修改原有的 index.htm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3dgs进行语义标注">
+<meta property="og:url" content="http://skiesclear.github.io/posts/3dgs%E8%BF%9B%E8%A1%8C%E8%AF%AD%E4%B9%89%E6%A0%87%E6%B3%A8/index.html">
+<meta property="og:site_name" content="Clearday Blog">
+<meta property="og:description" content="3DGS 语义几何标注工具使用说明本文档介绍 aholo3dgs&#x2F;semantic-annotator.html。该页面用于直接在 3D Gaussian Splatting 场景中标注具有稳定三维坐标的语义实例，并导出 OpenFly 数据集工具链可读取的 object_anchors_&lt;environment&gt;.json。 标注器是独立页面，不替换也不修改原有的 index.htm">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-09-25T12:33:38.000Z">
+<meta property="article:modified_time" content="2026-09-25T12:34:59.119Z">
+<meta property="article:author" content="clearday">
+<meta property="article:tag" content="3dgs">
+<meta property="article:tag" content="语义分割">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>3dgs进行语义标注 - Clearday Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+
+
+
+  
+<link rel="stylesheet" href="/blog/css/post-custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"skiesclear.github.io","root":"/blog/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body class="banner-disabled sidebar-nav-collapsed">
+  
+
+  <header>
+    
+
+<div class="header-inner no-banner">
+  
+
+<nav id="navbar" class="navbar navbar-dark left-navbar" aria-label="Site navigation">
+  <button id="navbar-toggler-btn" class="navbar-toggler sidebar-toggler sidebar-toggle-expanded" type="button"
+          aria-controls="navbar-sidebar-content" aria-expanded="true" aria-label="Toggle navigation">
+    <img id="navbar-toggle-icon" class="sidebar-toggle-icon"
+         src="/blog/img/navigationBar/flod.png"
+         data-fold-src="/blog/img/navigationBar/flod.png"
+         data-unfold-src="/blog/img/navigationBar/unflod.png"
+         data-no-lazyload="true" alt="" aria-hidden="true">
+  </button>
+
+  <div id="navbar-sidebar-content" class="navbar-sidebar-content">
+    <div class="navbar-profile">
+      
+        <a class="navbar-avatar-link" href="/blog/" aria-label="clearday">
+          <img class="navbar-avatar" src="/blog/img/avatar_clearday.jpg" srcset="/blog/img/loading.gif" lazyload alt="avatar">
+        </a>
+      
+      <div class="navbar-social-grid" aria-label="Social links">
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://github.com/skiesclear" target="_blank" rel="nofollow noopener" aria-label="GitHub">
+              <img src="/blog/img/navigationBar/github-icon.png" srcset="/blog/img/loading.gif" lazyload alt="GitHub">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <button class="navbar-social-item navbar-social-qrcode" type="button" data-qrcode="/blog/img/wechat/wechat_QR.jpg" aria-label="WeChat">
+              <img src="/blog/img/navigationBar/wechat-icon.png" srcset="/blog/img/loading.gif" lazyload alt="WeChat">
+            </button>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="mailto:yaojx25@mails.jlu.edu.cn" target="_blank" rel="nofollow noopener" aria-label="Email">
+              <img src="/blog/img/navigationBar/email-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Email">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://t.me/clearday" target="_blank" rel="nofollow noopener" aria-label="Telegram">
+              <img src="/blog/img/navigationBar/telegram-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Telegram">
+            </a>
+          
+        
+      </div>
+      <a class="navbar-brand" href="/blog/">clearday</a>
+    </div>
+
+    <ul class="navbar-nav sidebar-nav-list">
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/" target="_self">
+              <i class="iconfont icon-home-fill"></i>
+              <span>Home</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/archives/" target="_self">
+              <i class="iconfont icon-archive-fill"></i>
+              <span>Archives</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/tags/" target="_self">
+              <i class="iconfont icon-tags-fill"></i>
+              <span>Tags</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://skiesclear.github.io/gallery/" target="_self">
+              <i class="iconfont icon-images"></i>
+              <span>Gallery</span>
+            </a>
+          </li>
+        
+      
+      
+        <li class="nav-item" id="search-btn">
+          <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <i class="iconfont icon-search"></i>
+            <span>Search</span>
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</nav>
+
+<div id="sidebar-nav-backdrop"></div>
+<div id="navbar-qrcode-popover" aria-hidden="true">
+  <img src="" srcset="/blog/img/loading.gif" lazyload alt="qrcode">
+</div>
+
+  
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3dgs进行语义标注</h1>
+            
+              <p class="post-intro">Openfly Platform提供的人工标注方法，人无法看到场景中的实物，属于盲标。这里基于3dgs场景方式进行标注。</p>
+            
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="3DGS-语义几何标注工具使用说明"><a href="#3DGS-语义几何标注工具使用说明" class="headerlink" title="3DGS 语义几何标注工具使用说明"></a>3DGS 语义几何标注工具使用说明</h1><p>本文档介绍 <code>aholo3dgs/semantic-annotator.html</code>。该页面用于直接在 3D Gaussian Splatting 场景中标注具有稳定三维坐标的语义实例，并导出 OpenFly 数据集工具链可读取的 <code>object_anchors_&lt;environment&gt;.json</code>。</p>
+<p>标注器是独立页面，不替换也不修改原有的 <code>index.html</code>、<code>python-control.html</code> 飞行与截图工作流。</p>
+<h2 id="1-功能概览"><a href="#1-功能概览" class="headerlink" title="1. 功能概览"></a>1. 功能概览</h2><p>目前支持四种对象几何：</p>
+<table>
+<thead>
+<tr>
+<th>页面选项</th>
+<th>导出 shape</th>
+<th align="right">所需几何点</th>
+<th>默认 landmark policy</th>
+<th>适合对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Point</td>
+<td><code>point</code></td>
+<td align="right">1</td>
+<td><code>point_center</code></td>
+<td>球网中心、门牌、按钮、单个目标点</td>
+</tr>
+<tr>
+<td>Oriented 3D box</td>
+<td><code>box</code></td>
+<td align="right">3 个控制点和高度</td>
+<td><code>box_keypoints</code></td>
+<td>椅子、桌子、柜子、设备等有体积实体</td>
+</tr>
+<tr>
+<td>Planar quadrilateral</td>
+<td><code>rectangle</code></td>
+<td align="right">4</td>
+<td><code>rectangle_keypoints</code></td>
+<td>门、窗、球网、屏幕、墙面局部</td>
+</tr>
+<tr>
+<td>Polygon area</td>
+<td><code>polygon</code></td>
+<td align="right">至少 3</td>
+<td><code>polygon_keypoints</code></td>
+<td>不规则地面、墙面区域、禁飞区域、复杂轮廓</td>
+</tr>
+</tbody></table>
+<p>所有最终坐标均采用 OpenFly 导航坐标系，标注结果可交给 <code>build_landmarks_from_objects.py</code>。</p>
+<h2 id="2-启动方式"><a href="#2-启动方式" class="headerlink" title="2. 启动方式"></a>2. 启动方式</h2><h3 id="2-1-在服务器上启动"><a href="#2-1-在服务器上启动" class="headerlink" title="2.1 在服务器上启动"></a>2.1 在服务器上启动</h3><p>进入 <code>aholo3dgs</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~/workspace/VLN/aholo3dgs<br>npx vite --host 127.0.0.1 --port 5173<br></code></pre></td></tr></table></figure>
+
+<p>保持该终端运行。绑定 <code>127.0.0.1</code> 表示网页只对服务器本机开放，外部通过 SSH 隧道访问，通常比直接暴露端口安全。</p>
+<p>如果服务器还没有 Node.js 或 <code>npx</code>，需要先安装项目原本使用的 Node.js 环境。</p>
+<h3 id="2-2-从自己的电脑建立-SSH-隧道"><a href="#2-2-从自己的电脑建立-SSH-隧道" class="headerlink" title="2.2 从自己的电脑建立 SSH 隧道"></a>2.2 从自己的电脑建立 SSH 隧道</h3><p>在自己的电脑上另开一个终端：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -N -L 15173:127.0.0.1:5173 &lt;用户名&gt;@&lt;服务器地址&gt; -p &lt;服务器SSH端口&gt;<br></code></pre></td></tr></table></figure>
+
+<p>例如服务器 SSH 服务本身运行在 443：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -N -L 15173:127.0.0.1:5173 yaojianhang_25@example.com -p 443<br></code></pre></td></tr></table></figure>
+
+<p>参数含义：</p>
+<ul>
+<li><code>-N</code>：只建立隧道，不执行远程命令。</li>
+<li><code>-L 15173:127.0.0.1:5173</code>：把本机 15173 转发到服务器的 5173。</li>
+<li><code>-p</code>：服务器的 SSH 登录端口。这与网页的 5173 端口不同，也与 GitHub SSH 443 配置无关。</li>
+<li>运行期间不要关闭这个 SSH 终端。</li>
+</ul>
+<p>然后在自己电脑的浏览器打开：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">http://127.0.0.1:15173/semantic-annotator.html<br></code></pre></td></tr></table></figure>
+
+<p>标注操作，包括 <code>Shift+左键</code>，是在自己电脑的浏览器中完成的，不要求服务器具有桌面环境。</p>
+<h3 id="2-3-选择其他-3DGS-场景"><a href="#2-3-选择其他-3DGS-场景" class="headerlink" title="2.3 选择其他 3DGS 场景"></a>2.3 选择其他 3DGS 场景</h3><p>默认加载羽毛球场。可以通过 URL 参数指定其他场景：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">http://127.0.0.1:15173/semantic-annotator.html?env=env_gs_room&amp;splat=./resource/room.sog&amp;voxelJson=./resource/room.voxel.json&amp;voxelBin=./resource/room.voxel.bin<br></code></pre></td></tr></table></figure>
+
+<p>主要参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>env</code></td>
+<td>环境名称，也是本地存储和导出文件名的一部分</td>
+<td><code>env_gs_badminton_court</code></td>
+</tr>
+<tr>
+<td><code>splat</code></td>
+<td>SOG 场景文件</td>
+<td>羽毛球场 SOG</td>
+</tr>
+<tr>
+<td><code>voxelJson</code></td>
+<td>碰撞体元数据</td>
+<td>羽毛球场 voxel JSON</td>
+</tr>
+<tr>
+<td><code>voxelBin</code></td>
+<td>碰撞体数据</td>
+<td>羽毛球场 voxel BIN</td>
+</tr>
+<tr>
+<td><code>x,y,z</code></td>
+<td>初始相机位置</td>
+<td>页面内置值</td>
+</tr>
+<tr>
+<td><code>yaw,pitch</code></td>
+<td>初始观察方向，单位为弧度</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxRayDistance</code></td>
+<td>表面吸附最大射线距离</td>
+<td>100 m</td>
+</tr>
+<tr>
+<td><code>maxTriangulationResidual</code></td>
+<td>多视角射线最大允许残差</td>
+<td>0.5 m</td>
+</tr>
+<tr>
+<td><code>maxPlanarityError</code></td>
+<td>四边形或多边形最大共面误差</td>
+<td>0.25 m</td>
+</tr>
+<tr>
+<td><code>voxelVerticalOffset</code></td>
+<td>体元与渲染坐标的竖直修正</td>
+<td>0.55 m</td>
+</tr>
+</tbody></table>
+<h2 id="3-基本操作"><a href="#3-基本操作" class="headerlink" title="3. 基本操作"></a>3. 基本操作</h2><ul>
+<li>鼠标拖动：旋转视角。</li>
+<li><code>W/A/S/D</code>：前后左右移动。</li>
+<li><code>Q/E</code>：竖直移动。</li>
+<li><code>Shift+左键</code>：记录当前几何顶点的一次观测。</li>
+<li><code>Undo observation</code>：撤销当前顶点的最后一次观测。</li>
+<li><code>Clear</code>：清除当前顶点尚未确认的全部观测。</li>
+<li><code>Confirm vertex</code>：将当前观测解算成一个三维顶点并确认。</li>
+<li><code>Undo vertex</code>：当前没有待处理观测时，撤销上一个已确认顶点。</li>
+<li><code>Save ...</code>：保存完整对象。</li>
+<li><code>Export JSON</code>：下载所有对象。</li>
+<li><code>Import JSON</code>：载入已有标注文件。</li>
+</ul>
+<p>蓝色标记表示已确认顶点，黄色标记表示当前待确认解算点，青色标记表示已保存对象。蓝线用于预览区域边界或 Box 边线。</p>
+<h2 id="4-多视角射线标注原理"><a href="#4-多视角射线标注原理" class="headerlink" title="4. 多视角射线标注原理"></a>4. 多视角射线标注原理</h2><p>普通的屏幕点击只能确定一条从相机出发、穿过像素的三维射线，不能单独确定射线上哪个位置才是真实物体。</p>
+<p>标注器记录：</p>
+<ul>
+<li>相机三维位置；</li>
+<li>相机 yaw、pitch、roll；</li>
+<li>点击像素坐标；</li>
+<li>射线起点；</li>
+<li>射线方向；</li>
+<li>当前视角编号和时间。</li>
+</ul>
+<p>从不同相机位置点击同一个实体点后，工具计算不同射线之间的最近点对，并取其中点作为三维位置估计。射线最近距离作为 residual：</p>
+<ul>
+<li>residual 越小，不同视角越一致；</li>
+<li>residual 很大，通常说明两个视角点到的不是同一个实体位置；</li>
+<li>默认 residual 超过 0.5 m 时拒绝确认。</li>
+</ul>
+<p>正确操作要求移动相机位置，而不只是原地旋转。两条射线起点过近时无法形成可靠三角测量。建议让两个视角之间具有明显横向基线，并保持目标清晰可见。</p>
+<p>对于细杆、球网、线缆等没有进入粗碰撞体的数据，应该使用默认的 <code>Multiview ray (thin objects)</code>。它不会沿射线寻找第一个碰撞面，因此不会把球网错误吸附到后方墙壁或地面。</p>
+<h2 id="5-Voxel-surface-snap"><a href="#5-Voxel-surface-snap" class="headerlink" title="5. Voxel surface snap"></a>5. Voxel surface snap</h2><p><code>Voxel surface snap</code> 会沿点击射线查询第一个碰撞体表面，适合墙、地板、大型桌面等已可靠包含在 voxel 数据中的实体。</p>
+<p>它不适合：</p>
+<ul>
+<li>球网、线缆、栏杆等细结构；</li>
+<li>半透明物体；</li>
+<li>碰撞体分辨率无法表达的细节；</li>
+<li>前景物体缺失、但后方存在墙面或地面的情况。</li>
+</ul>
+<p>表面吸附模式允许单次观测形成点，但从多个方向重复观测仍然有助于发现碰撞数据偏差。</p>
+<h2 id="6-Point-标注"><a href="#6-Point-标注" class="headerlink" title="6. Point 标注"></a>6. Point 标注</h2><p>适合只需要一个代表位置的实体。</p>
+<p>操作：</p>
+<ol>
+<li>Geometry 选择 <code>Point</code>。</li>
+<li>在第一个视角 <code>Shift+左键</code> 点击目标点。</li>
+<li>移动相机，从另一个视角点击相同物理点。</li>
+<li>点击 <code>Confirm vertex</code>。</li>
+<li>填写 Instance ID、Semantic type、Color 和 Size。</li>
+<li>点击 <code>Save point</code>。</li>
+</ol>
+<p>导出示意：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;net_center_01&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;badminton net&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;point&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;point&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1.2</span><span class="hljs-punctuation">,</span> <span class="hljs-number">3.4</span><span class="hljs-punctuation">,</span> <span class="hljs-number">1.55</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;landmark_policy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;point_center&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="7-Oriented-3D-box-标注"><a href="#7-Oriented-3D-box-标注" class="headerlink" title="7. Oriented 3D box 标注"></a>7. Oriented 3D box 标注</h2><p>Box 始终沿 OpenFly 导航 Z 轴竖直，yaw 表示其在导航 XY 平面内的方向。</p>
+<p>依次标注三个控制点：</p>
+<ol>
+<li><code>base center</code>：Box 底面中心。</li>
+<li><code>length direction edge</code>：从底面中心沿物体长度正方向，到长度边界中点。</li>
+<li><code>width direction edge</code>：从底面中心沿物体宽度方向，到宽度边界中点。</li>
+<li>在 <code>Box height (m)</code> 输入物体高度。</li>
+</ol>
+<p>长度是底面中心到长度边缘点距离的两倍；宽度同理；yaw 由底面中心指向长度方向点。宽度方向最终与长度方向正交，因此第二、第三控制点应尽量沿物体的两条正交轴点击。</p>
+<p>完成三个控制点后，页面显示 L&#x2F;W&#x2F;H、yaw 和 Box 十二条边的投影视图。确认预览与实体一致后再保存。</p>
+<p>导出包含：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;box&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;center&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1.0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">2.0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.75</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">2.0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.8</span><span class="hljs-punctuation">,</span> <span class="hljs-number">1.5</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;yaw&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0.52</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;corners&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;... eight corners ...&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;landmark_policy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;box_keypoints&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="8-Planar-quadrilateral-标注"><a href="#8-Planar-quadrilateral-标注" class="headerlink" title="8. Planar quadrilateral 标注"></a>8. Planar quadrilateral 标注</h2><p>依次沿边界顺序标注四个角点，例如顺时针：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">corner 1 -&gt; corner 2 -&gt; corner 3 -&gt; corner 4 -&gt; corner 1<br></code></pre></td></tr></table></figure>
+
+<p>不要使用交叉顺序，例如左上、右下、右上、左下，否则导出的边界会自交。页面会连接相邻角点并闭合预览。</p>
+<p>四个点可以位于地面、墙面或倾斜平面，不会被强制压到地面。保存前会检查共面性；最大点到拟合平面的偏差默认不得超过 0.25 m。</p>
+<p>导出使用：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;rectangle&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;corners&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;four ordered 3D points&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;landmark_policy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;rectangle_keypoints&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>这里的 <code>rectangle</code> 是为了兼容 OpenFly 现有格式。页面记录的是四个实际角点，因此它也可表达透视场景中的一般平面四边形。</p>
+<h2 id="9-Polygon-area-标注"><a href="#9-Polygon-area-标注" class="headerlink" title="9. Polygon area 标注"></a>9. Polygon area 标注</h2><p>适合不规则平面区域：</p>
+<ol>
+<li>沿轮廓顺时针或逆时针选择顶点。</li>
+<li>每个顶点完成多视角观测后点击 <code>Confirm vertex</code>。</li>
+<li>至少确认三个顶点。</li>
+<li>点击保存时，最后一个顶点会自动与第一个顶点闭合。</li>
+<li>不要重复点击第一个顶点，也不要让边界自交。</li>
+</ol>
+<p>多边形同样执行共面误差检查。复杂区域建议只保留能够稳定描述外轮廓的关键拐点，避免过密点击放大人工误差。</p>
+<p>导出使用：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;polygon&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;points&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;three or more ordered 3D points&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;landmark_policy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;polygon_keypoints&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="10-字段填写建议"><a href="#10-字段填写建议" class="headerlink" title="10. 字段填写建议"></a>10. 字段填写建议</h2><h3 id="Instance-ID"><a href="#Instance-ID" class="headerlink" title="Instance ID"></a>Instance ID</h3><p>必须在同一环境中唯一且长期稳定，建议使用英文小写、下划线和序号：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">chair_01<br>north_window_02<br>badminton_net_01<br></code></pre></td></tr></table></figure>
+
+<p>不要用仅在当前画面有意义的名称，例如 <code>left_object</code>。</p>
+<h3 id="Semantic-type"><a href="#Semantic-type" class="headerlink" title="Semantic type"></a>Semantic type</h3><p>描述对象类别，而不是实例编号，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">chair<br>window<br>badminton net<br>restricted area<br></code></pre></td></tr></table></figure>
+
+<p>重复物体共享 type，但必须拥有不同 id。</p>
+<h3 id="Color-与-Size"><a href="#Color-与-Size" class="headerlink" title="Color 与 Size"></a>Color 与 Size</h3><p>用于后续语言生成和目标区分。Color 应尽可能使用稳定的常见颜色词。Size 是语义大小标签 <code>small/medium/large</code>，不是 Box 的米制尺寸。</p>
+<h2 id="11-坐标系和观测元数据"><a href="#11-坐标系和观测元数据" class="headerlink" title="11. 坐标系和观测元数据"></a>11. 坐标系和观测元数据</h2><p>页面内部使用 Aholo 渲染坐标，导出前转换为 OpenFly 导航坐标：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">nav = [aholo.x, aholo.z, -aholo.y]<br></code></pre></td></tr></table></figure>
+
+<p>不要手工交换导出坐标。每个已确认顶点的 <code>annotation.vertices</code> 中会保留：</p>
+<ul>
+<li>顶点用途 role；</li>
+<li>最终导航坐标 point；</li>
+<li>原始 observations；</li>
+<li>rayResidual。</li>
+</ul>
+<p>这些元数据用于复查标注质量，不会改变 OpenFly 对 shape、corners、points、center、size 和 yaw 的读取。</p>
+<h2 id="12-保存、导入和数据安全"><a href="#12-保存、导入和数据安全" class="headerlink" title="12. 保存、导入和数据安全"></a>12. 保存、导入和数据安全</h2><p>每次保存对象后，项目会写入当前浏览器的 localStorage。localStorage 的键包含 <code>env</code>，不同环境互相隔离。</p>
+<p>注意：</p>
+<ul>
+<li>localStorage 不是可靠的长期备份；</li>
+<li>更换浏览器、清除网站数据或更换域名&#x2F;端口可能看不到原记录；</li>
+<li>每完成一批标注都应使用 <code>Export JSON</code>；</li>
+<li>导入 JSON 会替换当前环境内存储的 objects，因此导入前先导出现有结果；</li>
+<li>构建数据集时只需要导出的 JSON，不需要浏览器 localStorage。</li>
+</ul>
+<h2 id="13-首次使用建议"><a href="#13-首次使用建议" class="headerlink" title="13. 首次使用建议"></a>13. 首次使用建议</h2><ol>
+<li>先用一个明显角点练习 Point，理解“同一个物理点”的含义。</li>
+<li>第一次多视角点击后观察 residual，确认移动方向能形成足够基线。</li>
+<li>标细物体时坚持使用 Multiview ray。</li>
+<li>标 Box 时先确认方向轴和高度，不要只凭语义大小标签。</li>
+<li>四边形和多边形始终沿轮廓连续顺序标注。</li>
+<li>保存前旋转或移动相机，观察蓝色几何预览是否仍贴合实体。</li>
+<li>对重复物体使用明确唯一 id，并保持 type 一致。</li>
+<li>每完成若干对象就导出 JSON 并纳入版本或数据备份。</li>
+</ol>
+<h2 id="14-常见问题"><a href="#14-常见问题" class="headerlink" title="14. 常见问题"></a>14. 常见问题</h2><h3 id="点击球网却落到地面"><a href="#点击球网却落到地面" class="headerlink" title="点击球网却落到地面"></a>点击球网却落到地面</h3><p>原因通常是使用了 Voxel surface snap，而球网没有被粗 voxel 表达。切换到 Multiview ray，从两个不同相机位置点击同一网格交点。</p>
+<h3 id="一直提示需要另一个-camera-position"><a href="#一直提示需要另一个-camera-position" class="headerlink" title="一直提示需要另一个 camera position"></a>一直提示需要另一个 camera position</h3><p>你可能只旋转了视角，没有移动相机。使用 W&#x2F;A&#x2F;S&#x2F;D 横向移动一段距离再点击。</p>
+<h3 id="residual-过大"><a href="#residual-过大" class="headerlink" title="residual 过大"></a>residual 过大</h3><p>两个视角没有点击同一个物理点，或者视角基线和目标方向接近平行。撤销错误观测，选择更清晰的特征点并改变观察侧向角度。</p>
+<h3 id="平面不共面"><a href="#平面不共面" class="headerlink" title="平面不共面"></a>平面不共面</h3><p>检查是否误点到背景、地面或物体另一侧。使用 <code>Undo vertex</code> 撤回最近顶点重新标注。只有确认真实表面本身不规则且误差合理时，才通过 URL 调大 <code>maxPlanarityError</code>。</p>
+<h3 id="Box-朝向或尺寸不对"><a href="#Box-朝向或尺寸不对" class="headerlink" title="Box 朝向或尺寸不对"></a>Box 朝向或尺寸不对</h3><p>确认第二个控制点是长度方向的边缘中点，第三个是宽度方向边缘中点，而不是任意两个角点。高度需要手动输入实际米制估计。</p>
+<h3 id="SSH-隧道连接后页面打不开"><a href="#SSH-隧道连接后页面打不开" class="headerlink" title="SSH 隧道连接后页面打不开"></a>SSH 隧道连接后页面打不开</h3><p>依次检查：</p>
+<ol>
+<li>服务器上的 Vite 进程是否仍在运行。</li>
+<li>Vite 是否监听 <code>127.0.0.1:5173</code>。</li>
+<li>本机 SSH 隧道终端是否仍在运行。</li>
+<li>浏览器访问的是本机 <code>127.0.0.1:15173</code>。</li>
+<li><code>-p</code> 后填写的是服务器 SSH 登录端口，不是 5173。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/" class="print-no-link">#语义分割</a>
+      
+        <a href="/blog/tags/3dgs/" class="print-no-link">#3dgs</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3" style="background-color: hsl(106, 82%, 96%);">
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>clearday</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 25, 2026</div>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/posts/Qwen3-8-27B-FP8%E9%83%A8%E7%BD%B2/" title="Qwen3.8 27B-FP8部署">
+                        <span class="hidden-mobile">Qwen3.8 27B-FP8部署</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      function animateTocCollapse($childList) {
+        var el = $childList[0];
+        if ($childList.hasClass('tocbot-is-collapsed')) {
+          // 展开：从 0 过渡到自然高度，过渡结束后释放 max-height
+          $childList.removeClass('tocbot-is-collapsed');
+          $childList.css('max-height', el.scrollHeight + 'px');
+        } else {
+          // 折叠：先固定当前高度，再过渡到 0
+          $childList.css('max-height', el.scrollHeight + 'px');
+          void el.offsetHeight;
+          $childList.addClass('tocbot-is-collapsed');
+          $childList.css('max-height', '0');
+        }
+        clearTimeout(el.__tocCollapseTimer);
+        el.__tocCollapseTimer = setTimeout(function() {
+          $childList.css('max-height', '');
+        }, 350);
+      }
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        animateTocCollapse($childList);
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
