@@ -4,6 +4,30 @@
   
   
   <entry>
+    <title>JEPA的了解</title>
+    <link href="/blog/posts/JEPA%E7%9A%84%E4%BA%86%E8%A7%A3/"/>
+    <url>/blog/posts/JEPA%E7%9A%84%E4%BA%86%E8%A7%A3/</url>
+    
+    <intro>引用了一下对于世界模型中JEPA的理解</intro>
+    
+    
+    <content type="html"><![CDATA[<h1 id="JEPA：从理论到实践（引用与改写稿）"><a href="#JEPA：从理论到实践（引用与改写稿）" class="headerlink" title="JEPA：从理论到实践（引用与改写稿）"></a>JEPA：从理论到实践（引用与改写稿）</h1><blockquote><p><strong>引用说明</strong>：本文根据 <a href="https://1zeryu.github.io/blogs/p/jepa/">1zeryu’s blog《从理论到实践，解析 JEPA》</a> 整理并改写，原作者为 Yukun Zhou。本文不是原文的逐字转载；如需阅读完整内容，请访问原文。原文页面标注采用 <strong>CC BY-NC-SA 4.0</strong> 许可，转载、改编时请同时遵守该许可并保留署名、链接与许可说明。</p></blockquote><h2 id="文章概览"><a href="#文章概览" class="headerlink" title="文章概览"></a>文章概览</h2><p>JEPA（Joint Embedding Predictive Architecture，联合嵌入预测架构）是一类在潜在表示空间中进行预测的自监督学习框架。它的基本取向是：不要求模型逐像素或逐 token 复原未来输入，而是先把观测压缩成具有语义的向量，再预测未来观测对应的向量表示。</p><p>原文从 World Models（世界模型）出发，依次介绍 JEPA 的直觉、典型架构、LeWorldModel 的实现方式，并简要讨论 I-JEPA 和一些常见问题。</p><h2 id="1-从-World-Models-理解-JEPA"><a href="#1-从-World-Models-理解-JEPA" class="headerlink" title="1. 从 World Models 理解 JEPA"></a>1. 从 World Models 理解 JEPA</h2><p>世界模型可以看作智能体对环境的内部模拟器，通常包含状态、动作、记忆、预测和规划等要素。有了世界模型，智能体可以先在“脑内”评估未来，而不必对每种策略都进行真实试错。JEPA 对其中的“表征—预测”环节进行了强调：原始观测被映射到潜在空间，未来状态也在这个空间里进行预测。</p><h2 id="2-JEPA-的核心思想"><a href="#2-JEPA-的核心思想" class="headerlink" title="2. JEPA 的核心思想"></a>2. JEPA 的核心思想</h2><p>人类回忆场景时，通常记住的是对象、属性和关系，而不是每个像素。JEPA 借用了类似的思想：</p><ol><li>使用编码器把图像、视频或文本转换为嵌入向量；</li><li>使用上下文、历史信息或控制条件预测目标输入的嵌入；</li><li>让预测得到的表示接近目标编码器产生的表示。</li></ol><p>因此，JEPA 学习的是“下一幕的语义表示”，而不是对下一幕进行低层细节的逐点生成。</p><h2 id="3-典型技术架构"><a href="#3-典型技术架构" class="headerlink" title="3. 典型技术架构"></a>3. 典型技术架构</h2><p>一个简化的 JEPA 通常由 Encoder（编码器）和 Predictor（预测器）构成。编码器把原始输入压缩到联合嵌入空间；预测器在给定上下文、动作、掩码或可见区域等条件时，预测目标嵌入。</p><p>设输入为 <code>x</code>，目标为 <code>y</code>，条件信息为 <code>z</code>。编码器得到 <code>Sx</code> 和 <code>Sy</code>，预测器根据 <code>Sx</code> 与 <code>z</code> 产生 <code>Ŝy</code>。训练时，优化 <code>Ŝy</code> 与 <code>Sy</code> 之间的差异，使两者落在同一个联合向量空间中。</p><p>实际训练中，还需要处理表征坍缩和不稳定问题，常见手段包括 SIGReg 等正则化、EMA（指数移动平均）以及时序或空间上的结构化约束。</p><h2 id="4-LeWorldModel：在潜空间中做规划"><a href="#4-LeWorldModel：在潜空间中做规划" class="headerlink" title="4. LeWorldModel：在潜空间中做规划"></a>4. LeWorldModel：在潜空间中做规划</h2><p>给定初始观测 <code>o₁</code> 和目标观测 <code>o_g</code>，首先将它们编码到潜空间：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">ẑ₁ = enc(o₁)<br>z_g = enc(o_g)<br></code></pre></td></tr></table></figure><p>随后，对候选动作序列进行 rollout，并通过预测器递推潜状态：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ẑₜ₊₁ = pred(ẑₜ, aₜ)<br></code></pre></td></tr></table></figure><p>规划目标是让时域末端的预测表示接近目标表示，例如最小化：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">C(ẑ_H) = ||ẑ_H - z_g||²<br></code></pre></td></tr></table></figure><p>实现上，编码器和预测器通常保持冻结，动作序列可以用 CEM（交叉熵方法）等采样式优化算法迭代更新：采样候选序列、在潜空间展开、计算终端代价、保留精英样本并更新分布，循环直至收敛或达到上限。</p><p>LeWorldModel 使用 ViT 作为图像编码器，通常取 CLS token 作为图像级表示，再通过投影头映射到目标嵌入维度。预测器则采用 Transformer 风格结构，根据历史图像 token 和动作嵌入预测未来 token。训练目标可以概括为：</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">总损失 = 预测损失 + λ × 正则化损失<br></code></pre></td></tr></table></figure><h2 id="5-I-JEPA-与相关工作"><a href="#5-I-JEPA-与相关工作" class="headerlink" title="5. I-JEPA 与相关工作"></a>5. I-JEPA 与相关工作</h2><p>I-JEPA 以及其他 JEPA 变体可以把掩码区域、空间关系、动作或时间关系作为预测条件。共同点仍然是在表示空间预测目标，而不是直接生成输入的全部低层细节。</p><h2 id="6-与-NTP、Diffusion-的关系"><a href="#6-与-NTP、Diffusion-的关系" class="headerlink" title="6. 与 NTP、Diffusion 的关系"></a>6. 与 NTP、Diffusion 的关系</h2><p>JEPA、下一 token 预测（NTP）和 Diffusion 并不是简单的替代关系。JEPA 更强调自监督表征学习、潜空间预测以及规划；NTP 和 Diffusion 更常用于生成式建模与条件生成。它们的目标函数和适用任务并不完全相同，需要针对具体任务进行系统比较。</p><h2 id="7-优势与仍待验证的问题"><a href="#7-优势与仍待验证的问题" class="headerlink" title="7. 优势与仍待验证的问题"></a>7. 优势与仍待验证的问题</h2><p>潜在优势包括：在压缩后的潜空间中推理、减少人工标注、以及为规划任务提供更直接的语义预测。但 JEPA 仍面临训练稳定性、表示质量、可扩展性和任务覆盖范围等问题。它是否能在更广泛的生成任务上取得稳定优势，还需要更多公开实验和公平对比。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol><li>Yukun Zhou，<a href="https://1zeryu.github.io/blogs/p/jepa/">《从理论到实践，解析 JEPA》</a>，原文页面标注 CC BY-NC-SA 4.0。</li><li>Yann LeCun, <em>A Path Towards Autonomous Machine Intelligence</em>。</li><li>Mahmoud Assran 等，<em>Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture</em>，arXiv:2301.08243。</li><li>Mido Assran 等，<em>V-JEPA 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning</em>。</li><li>Lucas Maes 等，<em>LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels</em>。</li></ol>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>JEPA</tag>
+      
+      <tag>World Model</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>3dgs进行语义标注</title>
     <link href="/blog/posts/3dgs%E8%BF%9B%E8%A1%8C%E8%AF%AD%E4%B9%89%E6%A0%87%E6%B3%A8/"/>
     <url>/blog/posts/3dgs%E8%BF%9B%E8%A1%8C%E8%AF%AD%E4%B9%89%E6%A0%87%E6%B3%A8/</url>
