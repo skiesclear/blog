@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/guitar.png?v=20260809">
+  <link rel="icon" href="/blog/img/guitar.png?v=20260809">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="clearday">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对于无人机VLA来说，判断任务是否停止，是需要整个轨迹的进度的。就需要额外的时序信息来送入stop head判断任务停止。 LSTM&#x2F;GRU传统时序网络这类网络的本质是将所有历史信息最终都必须压缩进一个固定维度的 hidden state，这对于视觉语言导航来说，让其包含“起始点的视觉信息，当前点的视觉信息，目标语义”来说，就造成了严重的信息瓶颈。  Transformer 类 Memo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="时序信息的处理，网络的LSTM&#x2F;GRU|模型">
+<meta property="og:url" content="http://skiesclear.github.io/posts/%E6%97%B6%E5%BA%8F%E4%BF%A1%E6%81%AF%E7%9A%84%E5%A4%84%E7%90%86%EF%BC%8C%E7%BD%91%E7%BB%9C%E7%9A%84LSTM-GRU-%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Clearday Blog">
+<meta property="og:description" content="对于无人机VLA来说，判断任务是否停止，是需要整个轨迹的进度的。就需要额外的时序信息来送入stop head判断任务停止。 LSTM&#x2F;GRU传统时序网络这类网络的本质是将所有历史信息最终都必须压缩进一个固定维度的 hidden state，这对于视觉语言导航来说，让其包含“起始点的视觉信息，当前点的视觉信息，目标语义”来说，就造成了严重的信息瓶颈。  Transformer 类 Memo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://skiesclear.github.io/blog/img/261012/GRU_train_result.png">
+<meta property="article:published_time" content="2026-10-12T07:52:56.000Z">
+<meta property="article:modified_time" content="2026-10-12T11:23:21.985Z">
+<meta property="article:author" content="clearday">
+<meta property="article:tag" content="LSTM">
+<meta property="article:tag" content="Memory-Augmented Transformer">
+<meta property="article:tag" content="时序信息">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://skiesclear.github.io/blog/img/261012/GRU_train_result.png">
+  
+  
+  
+  <title>时序信息的处理，网络的LSTM/GRU|模型 - Clearday Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+
+
+
+  
+<link rel="stylesheet" href="/blog/css/post-custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"skiesclear.github.io","root":"/blog/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body class="banner-disabled sidebar-nav-collapsed">
+  
+
+  <header>
+    
+
+<div class="header-inner no-banner">
+  
+
+<nav id="navbar" class="navbar navbar-dark left-navbar" aria-label="Site navigation">
+  <button id="navbar-toggler-btn" class="navbar-toggler sidebar-toggler sidebar-toggle-expanded" type="button"
+          aria-controls="navbar-sidebar-content" aria-expanded="true" aria-label="Toggle navigation">
+    <img id="navbar-toggle-icon" class="sidebar-toggle-icon"
+         src="/blog/img/navigationBar/flod.png"
+         data-fold-src="/blog/img/navigationBar/flod.png"
+         data-unfold-src="/blog/img/navigationBar/unflod.png"
+         data-no-lazyload="true" alt="" aria-hidden="true">
+  </button>
+
+  <div id="navbar-sidebar-content" class="navbar-sidebar-content">
+    <div class="navbar-profile">
+      
+        <a class="navbar-avatar-link" href="/blog/" aria-label="clearday">
+          <img class="navbar-avatar" src="/blog/img/avatar_clearday.jpg" srcset="/blog/img/loading.gif" lazyload alt="avatar">
+        </a>
+      
+      <div class="navbar-social-grid" aria-label="Social links">
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://github.com/skiesclear" target="_blank" rel="nofollow noopener" aria-label="GitHub">
+              <img src="/blog/img/navigationBar/github-icon.png" srcset="/blog/img/loading.gif" lazyload alt="GitHub">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <button class="navbar-social-item navbar-social-qrcode" type="button" data-qrcode="/blog/img/wechat/wechat_QR.jpg" aria-label="WeChat">
+              <img src="/blog/img/navigationBar/wechat-icon.png" srcset="/blog/img/loading.gif" lazyload alt="WeChat">
+            </button>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="mailto:yaojx25@mails.jlu.edu.cn" target="_blank" rel="nofollow noopener" aria-label="Email">
+              <img src="/blog/img/navigationBar/email-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Email">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://t.me/clearday" target="_blank" rel="nofollow noopener" aria-label="Telegram">
+              <img src="/blog/img/navigationBar/telegram-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Telegram">
+            </a>
+          
+        
+      </div>
+      <a class="navbar-brand" href="/blog/">clearday</a>
+    </div>
+
+    <ul class="navbar-nav sidebar-nav-list">
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/" target="_self">
+              <i class="iconfont icon-home-fill"></i>
+              <span>Home</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/archives/" target="_self">
+              <i class="iconfont icon-archive-fill"></i>
+              <span>Archives</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/tags/" target="_self">
+              <i class="iconfont icon-tags-fill"></i>
+              <span>Tags</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://skiesclear.github.io/gallery/" target="_self">
+              <i class="iconfont icon-images"></i>
+              <span>Gallery</span>
+            </a>
+          </li>
+        
+      
+      
+        <li class="nav-item" id="search-btn">
+          <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <i class="iconfont icon-search"></i>
+            <span>Search</span>
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</nav>
+
+<div id="sidebar-nav-backdrop"></div>
+<div id="navbar-qrcode-popover" aria-hidden="true">
+  <img src="" srcset="/blog/img/loading.gif" lazyload alt="qrcode">
+</div>
+
+  
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">时序信息的处理，网络的LSTM/GRU|模型</h1>
+            
+              <p class="post-intro">对于长程处理任务来说需要保留时序信息，但是如果每一步的主决定依赖当前信息，那么需要辅助决定就需要额外的时序处理模块</p>
+            
+            
+            
+              <div class="markdown-body">
+                
+                <p>对于无人机VLA来说，判断任务是否停止，是需要整个轨迹的进度的。就需要额外的时序信息来送入stop head判断任务停止。</p>
+<h1 id="LSTM-GRU传统时序网络"><a href="#LSTM-GRU传统时序网络" class="headerlink" title="LSTM&#x2F;GRU传统时序网络"></a>LSTM&#x2F;GRU传统时序网络</h1><p>这类网络的本质是将<strong>所有历史信息最终都必须压缩进一个固定维度的 hidden state</strong>，这对于视觉语言导航来说，让其包含“起始点的视觉信息，当前点的视觉信息，目标语义”来说，就造成了严重的信息瓶颈。</p>
+<p><img src="/blog/img/261012/GRU_train_result.png" srcset="/blog/img/loading.gif" lazyload alt="GRU作为stop head头的训练效果"></p>
+<h1 id="Transformer-类-Memory-方法"><a href="#Transformer-类-Memory-方法" class="headerlink" title="Transformer 类 Memory 方法"></a>Transformer 类 Memory 方法</h1><p>相比于GRU将<code>过去信息 → 压缩 → 一个hidden state</code>, transformer的attention机制会选择需要的信息，从而做当前决策</p>
+<h2 id="两种方法"><a href="#两种方法" class="headerlink" title="两种方法"></a>两种方法</h2><p>都是为 Transformer 引入跨序列、跨时间步的持久记忆机制，使模型能够保留和利用历史信息。</p>
+<h3 id="Transformer-XL"><a href="#Transformer-XL" class="headerlink" title="Transformer-XL"></a>Transformer-XL</h3><p>Transformer-XL 会缓存上一段输入的 hidden states，在处理下一段时作为额外上下文使用。</p>
+<h3 id="Recurrent-Memory-Transformer（RMT）"><a href="#Recurrent-Memory-Transformer（RMT）" class="headerlink" title="Recurrent Memory Transformer（RMT）"></a>Recurrent Memory Transformer（RMT）</h3><p>RMT 使用特殊的 memory tokens：</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs excel">第 <span class="hljs-built_in">t</span> 段输入 + memory tokens<br>          ↓<br>Transformer<br>          ↓<br>更新后的 memory tokens<br>          ↓<br>传给第 <span class="hljs-built_in">t</span>+<span class="hljs-number">1</span> 段<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/%E6%97%B6%E5%BA%8F%E4%BF%A1%E6%81%AF/" class="print-no-link">#时序信息</a>
+      
+        <a href="/blog/tags/LSTM/" class="print-no-link">#LSTM</a>
+      
+        <a href="/blog/tags/Memory-Augmented-Transformer/" class="print-no-link">#Memory-Augmented Transformer</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3" style="background-color: hsl(304, 82%, 96%);">
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>clearday</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 12, 2026</div>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/posts/%E5%88%A0%E9%99%A4%E6%97%A0%E6%95%88%E6%8B%AC%E5%8F%B7-leetcode/" title="删除无效括号-leetcode">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">删除无效括号-leetcode</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/posts/JEPA%E7%9A%84%E4%BA%86%E8%A7%A3/" title="JEPA的了解">
+                        <span class="hidden-mobile">JEPA的了解</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      function animateTocCollapse($childList) {
+        var el = $childList[0];
+        if ($childList.hasClass('tocbot-is-collapsed')) {
+          // 展开：从 0 过渡到自然高度，过渡结束后释放 max-height
+          $childList.removeClass('tocbot-is-collapsed');
+          $childList.css('max-height', el.scrollHeight + 'px');
+        } else {
+          // 折叠：先固定当前高度，再过渡到 0
+          $childList.css('max-height', el.scrollHeight + 'px');
+          void el.offsetHeight;
+          $childList.addClass('tocbot-is-collapsed');
+          $childList.css('max-height', '0');
+        }
+        clearTimeout(el.__tocCollapseTimer);
+        el.__tocCollapseTimer = setTimeout(function() {
+          $childList.css('max-height', '');
+        }, 350);
+      }
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        animateTocCollapse($childList);
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

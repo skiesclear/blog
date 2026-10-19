@@ -1,0 +1,687 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/guitar.png?v=20260809">
+  <link rel="icon" href="/blog/img/guitar.png?v=20260809">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="clearday">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="题目介绍 删除无效的括号给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。返回所有可能的结果。答案可以按 任意顺序 返回。  示例输入：s &#x3D; “()())()”输出：[“(())()”,”()()()”] 题解背景知识判断是否为有效括号如果当前遍历到的「左括号」的数目严格小于「右括号」的数目则表达式无效。  严格小于：从头扫描字符串时，如果某一刻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="删除无效括号-leetcode">
+<meta property="og:url" content="http://skiesclear.github.io/posts/%E5%88%A0%E9%99%A4%E6%97%A0%E6%95%88%E6%8B%AC%E5%8F%B7-leetcode/index.html">
+<meta property="og:site_name" content="Clearday Blog">
+<meta property="og:description" content="题目介绍 删除无效的括号给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。返回所有可能的结果。答案可以按 任意顺序 返回。  示例输入：s &#x3D; “()())()”输出：[“(())()”,”()()()”] 题解背景知识判断是否为有效括号如果当前遍历到的「左括号」的数目严格小于「右括号」的数目则表达式无效。  严格小于：从头扫描字符串时，如果某一刻">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-19T08:57:33.000Z">
+<meta property="article:modified_time" content="2026-10-19T09:08:23.364Z">
+<meta property="article:author" content="clearday">
+<meta property="article:tag" content="coding">
+<meta property="article:tag" content="leetcode">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>删除无效括号-leetcode - Clearday Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+
+
+
+  
+<link rel="stylesheet" href="/blog/css/post-custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"skiesclear.github.io","root":"/blog/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/blog/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body class="banner-disabled sidebar-nav-collapsed">
+  
+
+  <header>
+    
+
+<div class="header-inner no-banner">
+  
+
+<nav id="navbar" class="navbar navbar-dark left-navbar" aria-label="Site navigation">
+  <button id="navbar-toggler-btn" class="navbar-toggler sidebar-toggler sidebar-toggle-expanded" type="button"
+          aria-controls="navbar-sidebar-content" aria-expanded="true" aria-label="Toggle navigation">
+    <img id="navbar-toggle-icon" class="sidebar-toggle-icon"
+         src="/blog/img/navigationBar/flod.png"
+         data-fold-src="/blog/img/navigationBar/flod.png"
+         data-unfold-src="/blog/img/navigationBar/unflod.png"
+         data-no-lazyload="true" alt="" aria-hidden="true">
+  </button>
+
+  <div id="navbar-sidebar-content" class="navbar-sidebar-content">
+    <div class="navbar-profile">
+      
+        <a class="navbar-avatar-link" href="/blog/" aria-label="clearday">
+          <img class="navbar-avatar" src="/blog/img/avatar_clearday.jpg" srcset="/blog/img/loading.gif" lazyload alt="avatar">
+        </a>
+      
+      <div class="navbar-social-grid" aria-label="Social links">
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://github.com/skiesclear" target="_blank" rel="nofollow noopener" aria-label="GitHub">
+              <img src="/blog/img/navigationBar/github-icon.png" srcset="/blog/img/loading.gif" lazyload alt="GitHub">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <button class="navbar-social-item navbar-social-qrcode" type="button" data-qrcode="/blog/img/wechat/wechat_QR.jpg" aria-label="WeChat">
+              <img src="/blog/img/navigationBar/wechat-icon.png" srcset="/blog/img/loading.gif" lazyload alt="WeChat">
+            </button>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="mailto:yaojx25@mails.jlu.edu.cn" target="_blank" rel="nofollow noopener" aria-label="Email">
+              <img src="/blog/img/navigationBar/email-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Email">
+            </a>
+          
+        
+          
+          
+          
+            
+          
+          
+            <a class="navbar-social-item" href="https://t.me/clearday" target="_blank" rel="nofollow noopener" aria-label="Telegram">
+              <img src="/blog/img/navigationBar/telegram-icon.png" srcset="/blog/img/loading.gif" lazyload alt="Telegram">
+            </a>
+          
+        
+      </div>
+      <a class="navbar-brand" href="/blog/">clearday</a>
+    </div>
+
+    <ul class="navbar-nav sidebar-nav-list">
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/" target="_self">
+              <i class="iconfont icon-home-fill"></i>
+              <span>Home</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/archives/" target="_self">
+              <i class="iconfont icon-archive-fill"></i>
+              <span>Archives</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/tags/" target="_self">
+              <i class="iconfont icon-tags-fill"></i>
+              <span>Tags</span>
+            </a>
+          </li>
+        
+      
+        
+        
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://skiesclear.github.io/gallery/" target="_self">
+              <i class="iconfont icon-images"></i>
+              <span>Gallery</span>
+            </a>
+          </li>
+        
+      
+      
+        <li class="nav-item" id="search-btn">
+          <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <i class="iconfont icon-search"></i>
+            <span>Search</span>
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</nav>
+
+<div id="sidebar-nav-backdrop"></div>
+<div id="navbar-qrcode-popover" aria-hidden="true">
+  <img src="" srcset="/blog/img/loading.gif" lazyload alt="qrcode">
+</div>
+
+  
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">删除无效括号-leetcode</h1>
+            
+              <p class="post-intro">力扣上一道从无效括号序列中找出有效序列的题目，有很多括号排列的小知识</p>
+            
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h1><ol start="301">
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-invalid-parentheses/description/?envType=problem-list-v2&envId=2cktkvj">删除无效的括号</a><br>给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。<br>返回所有可能的结果。答案可以按 任意顺序 返回。</li>
+</ol>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>输入：s &#x3D; “()())()”<br>输出：[“(())()”,”()()()”]</p>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-invalid-parentheses/solutions/1067271/shan-chu-wu-xiao-de-gua-hao-by-leetcode-9w8au/?envType=problem-list-v2&envId=2cktkvj">题解</a></h1><h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="判断是否为有效括号"><a href="#判断是否为有效括号" class="headerlink" title="判断是否为有效括号"></a>判断是否为有效括号</h3><p>如果当前遍历到的「左括号」的数目严格小于「右括号」的数目则表达式无效。</p>
+<blockquote>
+<p>严格小于：从头扫描字符串时，如果某一刻遇到的左括号数量 少于 右括号数量，表达式就无效，因为有右括号找不到前面的左括号与它配对。</p>
+</blockquote>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs hsp">def isValid(string):<br>    <span class="hljs-keyword">cnt</span> = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> s in string:<br>        <span class="hljs-keyword">if</span> s == <span class="hljs-string">&#x27;(&#x27;</span>:<br>            <span class="hljs-keyword">cnt</span> += <span class="hljs-number">1</span><br>        elif s == <span class="hljs-string">&#x27;)&#x27;</span>:<br>            <span class="hljs-keyword">cnt</span> -= <span class="hljs-number">1</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">cnt</span> &lt; <span class="hljs-number">0</span>:<br>                <span class="hljs-keyword">return</span> False<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">cnt</span> == <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="找出为了变成有效括号序列时需要删除的最小左右括号数量"><a href="#找出为了变成有效括号序列时需要删除的最小左右括号数量" class="headerlink" title="找出为了变成有效括号序列时需要删除的最小左右括号数量"></a>找出为了变成有效括号序列时需要删除的最小左右括号数量</h3><ul>
+<li>当遍历到「左括号」的时候：  <ul>
+<li>「左括号」数量加 1。</li>
+</ul>
+</li>
+<li>当遍历到「右括号」的时候：  <ul>
+<li>如果此时「左括号」的数量不为 0，因为「右括号」可以与之前遍历到的「左括号」匹配，此时「左括号」出现的次数 −1；  </li>
+<li>如果此时「左括号」的数量为 0，「右括号」数量加 1。</li>
+</ul>
+</li>
+</ul>
+<p>通过这样的计数规则，得到的「左括号」和「右括号」的数量就是各自最少应该删除的数量。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">leftBracket</span> = <span class="hljs-number">0</span><br><span class="hljs-attribute">rightBracket</span> = <span class="hljs-number">0</span><br><span class="hljs-attribute">for</span> charS in s:<br>    <span class="hljs-attribute">if</span> charS == &#x27;(&#x27;:<br>        <span class="hljs-attribute">leftBracket</span> += <span class="hljs-number">1</span><br>    <span class="hljs-attribute">elif</span> charS == &#x27;)&#x27;:<br>        <span class="hljs-attribute">if</span> leftBracket != <span class="hljs-number">0</span>:<br>            <span class="hljs-attribute">leftBracket</span> -= <span class="hljs-number">1</span><br>        <span class="hljs-attribute">else</span>:<br>            <span class="hljs-attribute">rightBracket</span> += <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="回溯-剪枝"><a href="#回溯-剪枝" class="headerlink" title="回溯+剪枝"></a>回溯+剪枝</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    def remove<span class="hljs-title class_ inherited__">InvalidParentheses</span>(<span class="hljs-keyword">self</span>, s: str) -&gt; list[str]:<br>        left<span class="hljs-title class_ inherited__">Bracket</span> = 0<br>        right<span class="hljs-title class_ inherited__">Bracket</span> = 0<br>        <span class="hljs-keyword">for</span> char<span class="hljs-title class_ inherited__">S</span> <span class="hljs-keyword">in</span> s:<br>            <span class="hljs-keyword">if</span> char<span class="hljs-title class_ inherited__">S</span> == &#x27;(&#x27;:<br>                left<span class="hljs-title class_ inherited__">Bracket</span> += 1<br>            elif char<span class="hljs-title class_ inherited__">S</span> == &#x27;)&#x27;:<br>                <span class="hljs-keyword">if</span> left<span class="hljs-title class_ inherited__">Bracket</span> != 0:<br>                    left<span class="hljs-title class_ inherited__">Bracket</span> -= 1<br>                <span class="hljs-keyword">else</span>:<br>                    right<span class="hljs-title class_ inherited__">Bracket</span> += 1<br>        ans = []<br>        def <span class="hljs-keyword">is</span><span class="hljs-title class_ inherited__">Valid</span>(string):<br>            cnt = 0<br>            <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> string:<br>                <span class="hljs-keyword">if</span> s == &#x27;(&#x27;:<br>                    cnt += 1<br>                elif s == &#x27;)&#x27;:<br>                    cnt -= 1<br>                    <span class="hljs-keyword">if</span> cnt &lt; 0:<br>                        <span class="hljs-keyword">return</span> <span class="hljs-title class_ inherited__">False</span><br>            <span class="hljs-keyword">return</span> cnt == 0<br>        def remove<span class="hljs-title class_ inherited__">Backet</span>(removed<span class="hljs-title class_ inherited__">Str</span>, index, lremove, rremove):<br>            <span class="hljs-keyword">if</span> lremove == 0 and rremove == 0:<br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">is</span><span class="hljs-title class_ inherited__">Valid</span>(removed<span class="hljs-title class_ inherited__">Str</span>):<br>                    ans.append(removed<span class="hljs-title class_ inherited__">Str</span>)<br>                <span class="hljs-keyword">return</span><br>            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(index, len(removed<span class="hljs-title class_ inherited__">Str</span>)):<br>                <span class="hljs-keyword">if</span> i &gt; index and removed<span class="hljs-title class_ inherited__">Str</span>[i] == removed<span class="hljs-title class_ inherited__">Str</span>[i-1]:<br>                    <span class="hljs-keyword">continue</span><br>                <span class="hljs-keyword">if</span> lremove + rremove &gt; len(s) - i:<br>                    <span class="hljs-keyword">break</span><br>                <span class="hljs-keyword">if</span> lremove &gt; 0 and removed<span class="hljs-title class_ inherited__">Str</span>[i] == &#x27;(&#x27;:<br>                    remove<span class="hljs-title class_ inherited__">Backet</span>(removed<span class="hljs-title class_ inherited__">Str</span>[:i]+removed<span class="hljs-title class_ inherited__">Str</span>[i+1:], i, lremove - 1, rremove)<br>                <span class="hljs-keyword">if</span> rremove &gt; 0 and removed<span class="hljs-title class_ inherited__">Str</span>[i] == &#x27;)&#x27;:<br>                    remove<span class="hljs-title class_ inherited__">Backet</span>(removed<span class="hljs-title class_ inherited__">Str</span>[:i]+removed<span class="hljs-title class_ inherited__">Str</span>[i+1:], i, lremove, rremove - 1)<br>                <br>        remove<span class="hljs-title class_ inherited__">Backet</span>(s, 0, left<span class="hljs-title class_ inherited__">Bracket</span>, right<span class="hljs-title class_ inherited__">Bracket</span>)<br>        <span class="hljs-keyword">return</span> ans<br></code></pre></td></tr></table></figure>
+
+<h2 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h2><p>注意到题目中要求最少删除，这样的描述正是广度优先搜索算法应用的场景，并且题目也要求我们输出所有的结果。我们在进行广度优先搜索时每一轮删除字符串中的 1 个括号，直到出现合法匹配的字符串为止，此时进行轮转的次数即为最少需要删除括号的个数。</p>
+<p>我们进行广度优先搜索时，每次保存上一轮搜索的结果，然后对上一轮已经保存的结果中的每一个字符串尝试所有可能的删除一个括号的方法，然后将保存的结果进行下一轮搜索。在保存结果时，我们可以利用哈希表对上一轮生成的结果去重，从而提高效率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">removeInvalidParentheses</span>(<span class="hljs-params">self, s: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-built_in">str</span>]:<br>        <span class="hljs-keyword">def</span> <span class="hljs-title function_">isValid</span>(<span class="hljs-params">s</span>):<br>            count = <span class="hljs-number">0</span><br>            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> s:<br>                <span class="hljs-keyword">if</span> c == <span class="hljs-string">&#x27;(&#x27;</span>:<br>                    count += <span class="hljs-number">1</span><br>                <span class="hljs-keyword">elif</span> c == <span class="hljs-string">&#x27;)&#x27;</span>:<br>                    count -= <span class="hljs-number">1</span><br>                    <span class="hljs-keyword">if</span> count &lt; <span class="hljs-number">0</span>:<br>                        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br>            <span class="hljs-keyword">return</span> count == <span class="hljs-number">0</span><br><br>        ans = []<br>        currSet = <span class="hljs-built_in">set</span>([s])<br><br>        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>            <span class="hljs-keyword">for</span> ss <span class="hljs-keyword">in</span> currSet:<br>                <span class="hljs-keyword">if</span> isValid(ss):<br>                    ans.append(ss)<br>            <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(ans) &gt; <span class="hljs-number">0</span>:<br>                <span class="hljs-keyword">return</span> ans<br>            nextSet = <span class="hljs-built_in">set</span>()<br>            <span class="hljs-keyword">for</span> ss <span class="hljs-keyword">in</span> currSet:<br>                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(ss)):<br>                    <span class="hljs-keyword">if</span> i &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> ss[i] == s[i - <span class="hljs-number">1</span>]:<br>                        <span class="hljs-keyword">continue</span><br>                    <span class="hljs-keyword">if</span> ss[i] == <span class="hljs-string">&#x27;(&#x27;</span> <span class="hljs-keyword">or</span> ss[i] == <span class="hljs-string">&#x27;)&#x27;</span>:<br>                        nextSet.add(ss[:i] + ss[i + <span class="hljs-number">1</span>:])<br>            currSet = nextSet<br>        <span class="hljs-keyword">return</span> ans<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/coding/" class="print-no-link">#coding</a>
+      
+        <a href="/blog/tags/leetcode/" class="print-no-link">#leetcode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3" style="background-color: hsl(38, 82%, 96%);">
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>clearday</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>October 19, 2026</div>
+        </div>
+      
+      
+    </div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/posts/%E6%97%B6%E5%BA%8F%E4%BF%A1%E6%81%AF%E7%9A%84%E5%A4%84%E7%90%86%EF%BC%8C%E7%BD%91%E7%BB%9C%E7%9A%84LSTM-GRU-%E6%A8%A1%E5%9E%8B/" title="时序信息的处理，网络的LSTM/GRU|模型">
+                        <span class="hidden-mobile">时序信息的处理，网络的LSTM/GRU|模型</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      function animateTocCollapse($childList) {
+        var el = $childList[0];
+        if ($childList.hasClass('tocbot-is-collapsed')) {
+          // 展开：从 0 过渡到自然高度，过渡结束后释放 max-height
+          $childList.removeClass('tocbot-is-collapsed');
+          $childList.css('max-height', el.scrollHeight + 'px');
+        } else {
+          // 折叠：先固定当前高度，再过渡到 0
+          $childList.css('max-height', el.scrollHeight + 'px');
+          void el.offsetHeight;
+          $childList.addClass('tocbot-is-collapsed');
+          $childList.css('max-height', '0');
+        }
+        clearTimeout(el.__tocCollapseTimer);
+        el.__tocCollapseTimer = setTimeout(function() {
+          $childList.css('max-height', '');
+        }, 350);
+      }
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        animateTocCollapse($childList);
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
